@@ -1,0 +1,87 @@
+name: build arch packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to build (e.g. systemd)'
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: validate package exists
+        run: |
+          pkg="distros/arch/${{ inputs.package }}"
+          if [ ! -f "${pkg}/PKGBUILD" ]; then
+            echo "ERROR: no PKGBUILD at ${pkg}"
+            exit 1
+          fi
+
+      - name: install build dependencies
+        run: |
+          pacman -Syu --noconfirm base-devel devtools git
+
+      - name: import signing keys
+        run: |
+          pkg="distros/arch/${{ inputs.package }}"
+          if [ -d "${pkg}/keys/pgp" ]; then
+            for key in ${pkg}/keys/pgp/*.asc; do
+              gpg --import "$key" 2>&1 || true
+            done
+          fi
+
+      - name: create build user
+        run: |
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+      - name: install package specific build deps
+        run: |
+          pkg="distros/arch/${{ inputs.package }}"
+          cd "$pkg"
+          # extract makedepends and install them
+          chown -R builder:builder .
+          su builder -c "makepkg --syncdeps --noconfirm --nobuild --noprepare" || true
+
+      - name: build
+        run: |
+          pkg="distros/arch/${{ inputs.package }}"
+          cd "$pkg"
+          chown -R builder:builder .
+          su builder -c "makepkg -s --noconfirm"
+
+      - name: verify no age verification in output
+        run: |
+          pkg="distros/arch/${{ inputs.package }}"
+          found=0
+          for f in ${pkg}/*.pkg.tar.*; do
+            [ -f "$f" ] || continue
+            if strings "$f" 2>/dev/null | grep -qiE "birthDate|birth_date|BIRTH_DATE|parse_birth_date|ageGroup|age_group|ParentalControls"; then
+              echo "FAIL: age verification strings found in $(basename $f)"
+              strings "$f" | grep -iE "birthDate|birth_date|BIRTH_DATE|parse_birth_date|ageGroup|age_group|ParentalControls"
+              found=1
+            fi
+          done
+          if [ "$found" = "1" ]; then
+            exit 1
+          fi
+          echo "PASS: no age verification strings in built packages"
+
+      - name: upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.package }}-packages
+          path: distros/arch/${{ inputs.package }}/*.pkg.tar.*
+          if-no-files-found: error

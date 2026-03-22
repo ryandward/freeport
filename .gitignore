@@ -1,0 +1,7 @@
+target/
+*.pkg.tar.zst
+*.pkg.tar.xz
+distros/arch/systemd/systemd/
+distros/arch/systemd/src/
+distros/arch/systemd/pkg/
+*.pkg.tar.xz

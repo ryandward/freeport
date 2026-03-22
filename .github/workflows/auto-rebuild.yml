@@ -1,0 +1,140 @@
+name: auto rebuild
+
+# Runs daily. Checks if Arch shipped a new version of any tracked package.
+# If yes: pulls the new PKGBUILD, applies our patches, builds, and publishes.
+# If patches fail to apply, opens an issue instead of silently breaking.
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  TRACKED_PACKAGES: systemd xdg-desktop-portal accountsservice
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install tools
+        run: pacman -Syu --noconfirm base-devel devtools asp git jq
+
+      - name: create build user
+        run: |
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+      - name: check for upstream version bumps and rebuild
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          needs_rebuild=""
+          patch_failures=""
+
+          for pkg in $TRACKED_PACKAGES; do
+            pkg_dir="distros/arch/${pkg}"
+
+            if [ ! -d "$pkg_dir" ] || [ ! -f "$pkg_dir/PKGBUILD" ]; then
+              continue
+            fi
+
+            our_ver=$(grep '^pkgver=' "$pkg_dir/PKGBUILD" | cut -d= -f2)
+            asp export "$pkg" /tmp/asp-${pkg} 2>/dev/null || continue
+            arch_ver=$(grep '^pkgver=' "/tmp/asp-${pkg}/PKGBUILD" | cut -d= -f2)
+
+            echo "${pkg}: ours=${our_ver} arch=${arch_ver}"
+
+            if [ "$our_ver" = "$arch_ver" ]; then
+              echo "${pkg}: up to date"
+              continue
+            fi
+
+            echo "${pkg}: new version detected, updating"
+
+            cp -r "$pkg_dir/patches" /tmp/patches-${pkg}
+            rm -rf "$pkg_dir"
+            cp -r "/tmp/asp-${pkg}" "$pkg_dir"
+            cp -r /tmp/patches-${pkg} "$pkg_dir/patches"
+
+            # inject freeport patch loop into prepare() if not present
+            if ! grep -q "freeport" "$pkg_dir/PKGBUILD"; then
+              python3 -c "
+          import re, sys
+          with open(sys.argv[1]) as f: t = f.read()
+          inject = '''
+            # freeport: strip age verification infrastructure
+            for p in \"\${startdir}\"/patches/*.patch; do
+              [ -f \"\$p\" ] || continue
+              if patch -Np1 --dry-run -i \"\$p\" >/dev/null 2>&1; then
+                echo \"freeport: applying \$(basename \\\"\$p\\\")\"
+                patch -Np1 -i \"\$p\"
+              fi
+            done
+          '''
+          t = t.replace('patch -Np1 -i ../0001-Use-Arch-Linux-device-access-groups.patch', 'patch -Np1 -i ../0001-Use-Arch-Linux-device-access-groups.patch\\n' + inject, 1)
+          with open(sys.argv[1], 'w') as f: f.write(t)
+          " "$pkg_dir/PKGBUILD"
+            fi
+
+            chown -R builder:builder "$pkg_dir"
+            if su builder -c "cd $pkg_dir && makepkg -so --noconfirm" 2>&1; then
+              echo "${pkg}: patches apply clean, building"
+              if su builder -c "cd $pkg_dir && makepkg -s --noconfirm" 2>&1; then
+                needs_rebuild="${needs_rebuild} ${pkg}"
+              else
+                patch_failures="${patch_failures}${pkg}: build failed after patching\n"
+              fi
+            else
+              patch_failures="${patch_failures}${pkg}: patches do not apply to ${arch_ver}\n"
+            fi
+          done
+
+          if [ -n "$needs_rebuild" ]; then
+            git config user.name "freeport-bot"
+            git config user.email "freeport-bot@users.noreply.github.com"
+            git add distros/
+            git commit -m "auto-update:${needs_rebuild}" || true
+            git push || true
+          fi
+
+          if [ -n "$patch_failures" ]; then
+            echo "patch failures detected:"
+            echo -e "$patch_failures"
+            {
+              echo "patch_failures<<EOF"
+              echo -e "$patch_failures"
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+            echo "has_failures=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: upload built packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: freeport-packages
+          path: distros/arch/*/*.pkg.tar.*
+          if-no-files-found: ignore
+
+      - name: open issue on patch failure
+        if: env.has_failures == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create patch-failure --color d73a4a --description "patches need manual rebasing" 2>&1 || true
+          gh issue create \
+            --title "patches need rebasing" \
+            --body "${{ env.patch_failures }}" \
+            --label patch-failure 2>/dev/null || \
+          gh issue create \
+            --title "patches need rebasing" \
+            --body "${{ env.patch_failures }}"

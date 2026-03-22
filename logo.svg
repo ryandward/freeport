@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="100%" stop-color="#2d1b4e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sky -->
+  <rect width="512" height="512" fill="url(#sky)" rx="32"/>
+
+  <!-- water -->
+  <rect x="0" y="310" width="512" height="202" fill="#0d1f33" rx="0"/>
+
+  <!-- left tower -->
+  <rect x="60" y="160" width="40" height="150" fill="#1a1025"/>
+  <rect x="52" y="152" width="56" height="12" fill="#1a1025"/>
+
+  <!-- wall -->
+  <rect x="100" y="220" width="80" height="90" fill="#1a1025"/>
+
+  <!-- gate arch -->
+  <path d="M 115,310 L 115,260 Q 135,240 155,260 L 155,310 Z" fill="#2d1b4e"/>
+
+  <!-- right tower -->
+  <rect x="170" y="160" width="45" height="150" fill="#1a1025"/>
+  <rect x="162" y="152" width="61" height="12" fill="#1a1025"/>
+
+  <!-- dock -->
+  <rect x="170" y="305" width="180" height="6" fill="#3d2a18"/>
+
+  <!-- ship hull silhouette -->
+  <path d="M 300,275 Q 330,290 420,290 L 440,275 L 430,300 Q 380,312 310,300 Z" fill="#1a1025"/>
+
+  <!-- mast and sail -->
+  <line x1="370" y1="155" x2="370" y2="290" stroke="#1a1025" stroke-width="3"/>
+  <path d="M 372,165 L 372,265 L 420,265 Q 422,220 400,175 Z" fill="#c4b49a" opacity="0.7"/>
+  <path d="M 368,170 L 368,265 L 325,265 Q 322,225 345,180 Z" fill="#c4b49a" opacity="0.6"/>
+
+  <!-- text -->
+  <text x="256" y="420" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="44" fill="#c4b49a" letter-spacing="6">FREEPORT</text>
+  <text x="256" y="452" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#6a5a4a" letter-spacing="3">PACKAGES WITHOUT INSPECTION</text>
+
+</svg>

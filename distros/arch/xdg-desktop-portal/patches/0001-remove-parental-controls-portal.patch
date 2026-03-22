@@ -1,0 +1,80 @@
+Remove the ParentalControls portal (age bracket querying API).
+
+This portal allows applications to query the user's age bracket
+via D-Bus. It was added in response to age verification laws
+(CA AB-1043, CO SB26-051, Brazil Lei 15.211).
+
+This patch removes the portal, its backend interface, the D-Bus
+XML definitions, the implementation, and the test infrastructure.
+It does not touch any other portal functionality.
+
+Based on xdg-desktop-portal PR #1922.
+
+diff --git a/data/meson.build b/data/meson.build
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -7,7 +7,6 @@ endif
+
+ portal_sources = files(
+   'org.freedesktop.portal.Account.xml',
+-  'org.freedesktop.portal.ParentalControls.xml',
+   'org.freedesktop.portal.Background.xml',
+   'org.freedesktop.portal.Camera.xml',
+   'org.freedesktop.portal.Clipboard.xml',
+@@ -48,7 +47,6 @@ portal_host_sources = files(
+ portal_impl_sources = files(
+   'org.freedesktop.impl.portal.Access.xml',
+   'org.freedesktop.impl.portal.Account.xml',
+-  'org.freedesktop.impl.portal.ParentalControls.xml',
+   'org.freedesktop.impl.portal.AppChooser.xml',
+   'org.freedesktop.impl.portal.Background.xml',
+   'org.freedesktop.impl.portal.Clipboard.xml',
+diff --git a/src/meson.build b/src/meson.build
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -0,0 +0,0 @@
+-  'parental-controls.c',
+diff --git a/src/xdp-context.c b/src/xdp-context.c
+--- a/src/xdp-context.c
++++ b/src/xdp-context.c
+@@ -48,7 +48,6 @@
+ #include "notification.h"
+ #include "open-uri.h"
+ #include "xdp-permissions.h"
+-#include "parental-controls.h"
+ #include "power-profile-monitor.h"
+ #include "print.h"
+ #include "proxy-resolver.h"
+@@ -383,7 +382,6 @@
+   init_background (context);
+   init_wallpaper (context);
+   init_account (context);
+-  init_parental_controls (context);
+   init_email (context);
+   init_secret (context, context->cancellable);
+   init_global_shortcuts (context);
+diff --git a/src/xdp-types.h b/src/xdp-types.h
+--- a/src/xdp-types.h
++++ b/src/xdp-types.h
+@@ -52,9 +52,6 @@
+ #define ACCOUNT_DBUS_IFACE DESKTOP_DBUS_IFACE ".Account"
+ #define ACCOUNT_DBUS_IMPL_IFACE DESKTOP_DBUS_IMPL_IFACE ".Account"
+
+-#define PARENTAL_CONTROLS_DBUS_IFACE DESKTOP_DBUS_IFACE ".ParentalControls"
+-#define PARENTAL_CONTROLS_DBUS_IMPL_IFACE DESKTOP_DBUS_IMPL_IFACE ".ParentalControls"
+-
+ #define BACKGROUND_DBUS_IFACE DESKTOP_DBUS_IFACE ".Background"
+ #define BACKGROUND_DBUS_IMPL_IFACE DESKTOP_DBUS_IMPL_IFACE ".Background"
+ #define BACKGROUND_PERMISSION_TABLE "background"
+diff --git a/data/org.freedesktop.impl.portal.ParentalControls.xml b/data/org.freedesktop.impl.portal.ParentalControls.xml
+deleted file mode 100644
+diff --git a/data/org.freedesktop.portal.ParentalControls.xml b/data/org.freedesktop.portal.ParentalControls.xml
+deleted file mode 100644
+diff --git a/src/parental-controls.c b/src/parental-controls.c
+deleted file mode 100644
+diff --git a/src/parental-controls.h b/src/parental-controls.h
+deleted file mode 100644
+diff --git a/tests/templates/parental_controls.py b/tests/templates/parental_controls.py
+deleted file mode 100644
+diff --git a/tests/test_parental_controls.py b/tests/test_parental_controls.py
+deleted file mode 100644
