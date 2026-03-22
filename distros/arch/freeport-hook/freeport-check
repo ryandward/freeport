@@ -1,0 +1,31 @@
+#!/bin/bash
+# freeport pre-transaction hook
+# Scans packages about to be installed for age verification infrastructure.
+# If found, aborts the transaction and tells you what to do.
+
+CACHE="/var/cache/pacman/pkg"
+PATTERNS="birthDate|birth_date|BIRTH_DATE|parse_birth_date|ageGroup|age_group|QueryAgeBracket|ParentalControls|AgeVerification"
+FOUND=0
+
+while read -r pkg; do
+    # find the cached package file
+    pkgfile=$(find "$CACHE" -name "${pkg}-[0-9]*" -newer /dev/null 2>/dev/null | head -1)
+    [ -z "$pkgfile" ] && continue
+
+    hits=$(strings "$pkgfile" 2>/dev/null | grep -cE "$PATTERNS")
+    if [ "$hits" -gt 0 ]; then
+        echo "BLOCKED: ${pkg} contains age verification infrastructure (${hits} matches)"
+        strings "$pkgfile" | grep -E "$PATTERNS" | head -5
+        FOUND=1
+    fi
+done
+
+if [ "$FOUND" -eq 1 ]; then
+    echo ""
+    echo "One or more packages contain age verification code."
+    echo "Build clean packages from https://github.com/ryandward/freeport"
+    echo "or add the freeport overlay repo to pacman.conf."
+    echo ""
+    echo "To override this check: pacman --hookdir /dev/null ..."
+    exit 1
+fi

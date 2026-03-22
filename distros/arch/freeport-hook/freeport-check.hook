@@ -1,0 +1,15 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = systemd
+Target = systemd-libs
+Target = systemd-sysvcompat
+Target = xdg-desktop-portal
+Target = accountsservice
+
+[Action]
+Description = Checking for age verification infrastructure...
+When = PreTransaction
+Exec = /usr/share/libalpm/scripts/freeport-check
+AbortOnFail
