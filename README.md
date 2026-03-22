@@ -56,6 +56,19 @@ ready.
 4. **Verifies** that built packages contain zero age verification strings
    before publishing
 
+## Preserving your toolchain
+
+Patching individual packages is only half the problem. The other half is
+making sure your package manager itself stays clean. pacman, apt, dnf,
+and every other package manager in the ecosystem could become a vector for
+age verification if maintainers are pressured to add compliance checks at
+the distribution level.
+
+We are working on toolchain level protections (pacman hooks, build
+verification, install time scanning) but this is hard to get right without
+breaking things. If you have ideas or experience with package manager
+internals, open an issue. We need help thinking through this.
+
 ## How to use it
 
 ### Arch Linux
