@@ -46,6 +46,7 @@ infrastructure:
 | **xdg-desktop-portal** | ParentalControls portal with `QueryAgeBracket` D-Bus method | [PR #1922](https://github.com/flatpak/xdg-desktop-portal/pull/1922) open, draft |
 | **accountsservice** | `BirthDate` property with polkit-gated `GetBirthDate` and `SetBirthDate` methods | [MR #176](https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176) open |
 | **archinstall** | Required birth date field during user creation (same author as systemd PR) | [PR #4290](https://github.com/archlinux/archinstall/pull/4290) open |
+| **pacman** | `agerequirement` field in PKGBUILDs | [MR #353](https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353) open (satirical, from the pacman maintainer, but we are watching for real attempts) |
 
 ## What freeport does
 
