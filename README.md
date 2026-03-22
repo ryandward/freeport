@@ -5,11 +5,11 @@
 # freeport
 
 **freeport is not an operating system.** Laws like California's AB 1043
-target operating system distributors. We are not one. We are a coalition
-of maintainers who believe your computer shouldn't willingly hand over
-your most precious cargo, your information, to analytics companies and
-the government. We maintain patches. We share them freely. That is all
-we do.
+target operating system distributors. This is not one. This is a project
+for people who believe your computer shouldn't willingly hand over your
+most precious cargo, your information, to analytics companies and the
+government. Patches are maintained here and shared freely. That is all
+this project does.
 
 ## I need your help
 
