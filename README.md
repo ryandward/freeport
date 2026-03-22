@@ -13,10 +13,10 @@ we do.
 
 ## I need your help
 
-I am one person. I can write patches for Arch and I can keep the watcher
-running, but I cannot do this alone across every distro, every package
-manager, and every upstream project that is being pressured to add
-identity collection to the stack.
+Right now this is a one person project. I can write patches for Arch and
+I can keep the watcher running, but this needs to grow beyond one person
+to cover every distro, every package manager, and every upstream project
+that is being pressured to add identity collection to the stack.
 
 If you know how pacman, apt, dnf, portage, or xbps works internally, I
 need you. If you package for Debian, Fedora, Void, Gentoo, or anything
