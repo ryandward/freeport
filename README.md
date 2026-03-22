@@ -44,7 +44,7 @@ infrastructure:
 |---------|---------------|---------------|
 | **systemd** | `birthDate` field in userdb user records, `--birth-date` flag in homectl | [PR #40954](https://github.com/systemd/systemd/pull/40954) merged to main. [Revert PR #41179](https://github.com/systemd/systemd/pull/41179) was closed, not merged. The code is still in the codebase. |
 | **xdg-desktop-portal** | ParentalControls portal with `QueryAgeBracket` D-Bus method | [PR #1922](https://github.com/flatpak/xdg-desktop-portal/pull/1922) open, draft |
-| **accountsservice** | Birth date storage in user account records | MR #176, in progress |
+| **accountsservice** | `BirthDate` property with polkit-gated `GetBirthDate` and `SetBirthDate` methods | [MR #176](https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176) open |
 | **archinstall** | Required birth date field during user creation (same author as systemd PR) | [PR #4290](https://github.com/archlinux/archinstall/pull/4290) open |
 
 ## What freeport does
