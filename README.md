@@ -40,13 +40,35 @@ to provide real time age bracket APIs. Colorado and Brazil have similar
 laws. In response, core open source projects have started adding this
 infrastructure:
 
+### Core infrastructure
+
 | Project | What was added | Current state |
 |---------|---------------|---------------|
 | **systemd** | `birthDate` field in userdb user records, `--birth-date` flag in homectl | [PR #40954](https://github.com/systemd/systemd/pull/40954) merged to main. [Revert PR #41179](https://github.com/systemd/systemd/pull/41179) was closed, not merged. The code is still in the codebase. |
 | **xdg-desktop-portal** | ParentalControls portal with `QueryAgeBracket` D-Bus method | [PR #1922](https://github.com/flatpak/xdg-desktop-portal/pull/1922) open, draft |
 | **accountsservice** | `BirthDate` property with polkit-gated `GetBirthDate` and `SetBirthDate` methods | [MR #176](https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176) open |
+
+### Distribution and desktop integrations
+
+| Project | What was added | Current state |
+|---------|---------------|---------------|
 | **archinstall** | Required birth date field during user creation (same author as systemd PR) | [PR #4290](https://github.com/archlinux/archinstall/pull/4290) open |
-| **pacman** | `agerequirement` field in PKGBUILDs | [MR #353](https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353) open (satirical, from the pacman maintainer, but we are watching for real attempts) |
+| **elementary OS settings** | Age declaration UI in user account creation | [Issue #260](https://github.com/elementary/settings-useraccounts/issues/260), [PR #270](https://github.com/elementary/settings-useraccounts/pull/270) open. Author is the elementary OS founder. |
+| **elementary OS portals** | Account portal exposing user information to applications | [Issue #173](https://github.com/elementary/portals/issues/173), [PR #180](https://github.com/elementary/portals/pull/180) open |
+| **Ubuntu desktop provisioning** | birthDate in user provisioning, BirthDate written to AccountsService | [PR #1326](https://github.com/canonical/ubuntu-desktop-provision/pull/1326), [PR #1338](https://github.com/canonical/ubuntu-desktop-provision/pull/1338), [PR #1339](https://github.com/canonical/ubuntu-desktop-provision/pull/1339) all closed after backlash |
+| **pacman** | `agerequirement` field in PKGBUILDs | [MR #353](https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353) satirical, from the pacman maintainer. We are watching for real attempts. |
+
+### Reference implementations
+
+| Project | What it does | Link |
+|---------|-------------|------|
+| **ageverifyd** | Reference daemon implementing `org.freedesktop.AgeVerification1` D-Bus interface. Stores age brackets, exposes `SetAge`, `SetDateOfBirth`, `GetAgeBracket` methods. | [outerheaven199X/ageverifyd](https://github.com/outerheaven199X/ageverifyd) |
+
+### Beyond Linux
+
+| Project | What is happening | Link |
+|---------|------------------|------|
+| **MidnightBSD** | BSD-side implementation: DOB storage in installer, `aged`/`agectl` helper tools, package manager ACLs | [Mailing list post](https://lists.freedesktop.org/archives/xdg/2026-March/014777.html) |
 
 ## What freeport does
 
@@ -152,6 +174,21 @@ going away, and the next attempt will be quieter.
 If that data exists on your machine, it is one subpoena, one breach, or
 one policy change away from being used against you. freeport exists to
 make sure that data never exists in the first place.
+
+## Related projects
+
+- [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance) --
+  documentation project tracking every age verification implementation
+  across the Linux stack. Good intelligence source, no patches.
+- [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify) --
+  tracks which operating systems have implemented age verification.
+  704 stars. Documentation only.
+- [Ageless Linux](https://agelesslinux.org/) -- Debian based distro in
+  deliberate noncompliance with AB 1043. Political statement, not a
+  patch project.
+- [outerheaven199X/ageverifyd](https://github.com/outerheaven199X/ageverifyd) --
+  reference implementation of the `org.freedesktop.AgeVerification1`
+  D-Bus daemon. Know what you are fighting.
 
 ## License
 
