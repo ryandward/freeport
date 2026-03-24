@@ -26,7 +26,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: install tools
-        run: pacman -Syu --noconfirm base-devel devtools asp git jq
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm --needed base-devel devtools git jq
+          pacman -S --noconfirm --needed asp || pip install asp-archlinux || echo "asp not available, using git clone fallback"
 
       - name: create build user
         run: |
