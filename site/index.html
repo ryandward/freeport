@@ -9,28 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&display=swap" rel="stylesheet">
 <style>
 
-/* ══════════════════════════════════════════════
- * Layers
- * ══════════════════════════════════════════════ */
-
 @layer reset, tokens, compositions, blocks, utilities, exceptions;
-
-
-/* ── Reset ── */
 
 @layer reset {
   *, *::before, *::after { box-sizing: border-box; }
   * { margin: 0; padding: 0; }
   html { -webkit-text-size-adjust: none; text-size-adjust: none; }
-  body { min-height: 100svh; line-height: 1.5; }
-  img, svg { display: block; max-width: 100%; }
+  body { min-height: 100svh; }
   a { color: inherit; text-decoration: inherit; }
   ul, ol { list-style: none; }
   p, h1, h2, h3, h4 { overflow-wrap: break-word; }
 }
-
-
-/* ── Tokens ── */
 
 @layer tokens {
   :root {
@@ -41,12 +30,12 @@
     --neutral-300: #D2D3DE;
     --neutral-400: #A0A2B5;
     --neutral-500: #6E7087;
-    --neutral-600: #565770;
     --neutral-700: #3F4059;
-    --neutral-800: #2A2B40;
-    --neutral-900: #1A1B2E;
     --neutral-950: #0A0A0C;
     --white: #FFFFFF;
+
+    --brand-600: #5B4AEE;
+    --brand-700: #4D3ED6;
 
     --emerald-600: #059669;
     --amber-600: #D97706;
@@ -56,63 +45,68 @@
     --space-2: 0.5rem;
     --space-3: 0.75rem;
     --space-4: 1rem;
+    --space-5: 1.25rem;
     --space-6: 1.5rem;
     --space-8: 2rem;
+    --space-10: 2.5rem;
     --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
 
-    --font-sans: "Inter Variable", "Inter", "Inter Fallback", ui-sans-serif, system-ui,
-      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-sans: "Inter Variable", "Inter", "Inter Fallback", ui-sans-serif,
+      system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
 
     --text-nano: 10px;
+    --text-micro: 11px;
     --text-fine: 12px;
     --text-body-sm: 13px;
     --text-body: 1rem;
+    --text-body-lg: 1.125rem;
     --text-heading: clamp(1.25rem, 1.5vw, 1.5rem);
+    --text-title: clamp(1.5rem, 2.5vw, 2rem);
 
     --leading-tight: 1.15;
     --leading-snug: 1.25;
     --leading-normal: 1.5;
+    --leading-relaxed: 1.65;
 
     --weight-normal: 400;
     --weight-medium: 500;
     --weight-semibold: 600;
 
     --tracking-tighter: -0.04em;
+    --tracking-tight: -0.025em;
     --tracking-normal: -0.011em;
     --tracking-wider: 0.08em;
 
     --radius-sm: 0.25rem;
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
-    --radius-pill: 9999px;
 
     --border-width: 1px;
 
-    --shadow-xs: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
-    --shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.05), 0 1px 2px hsl(0 0% 0% / 0.1);
+    --shadow-color-subtle: hsl(0 0% 0% / 0.05);
+    --shadow-color: hsl(0 0% 0% / 0.1);
+    --shadow-xs: 0 1px 2px 0 var(--shadow-color-subtle);
+    --shadow-sm: 0 1px 3px var(--shadow-color-subtle), 0 1px 2px var(--shadow-color);
 
     --duration-fast: 200ms;
     --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Intent aliases */
-    --color-surface: var(--neutral-150);
+    --color-surface: var(--neutral-100);
     --color-surface-raised: var(--neutral-50);
     --color-text: var(--neutral-950);
     --color-text-muted: var(--neutral-500);
     --color-border: var(--neutral-200);
-    --color-interactive: #5B4AEE;
-    --color-interactive-hover: #4D3ED6;
+    --color-border-subtle: color-mix(in srgb, var(--neutral-200) 50%, transparent);
+    --color-interactive: var(--brand-600);
+    --color-interactive-hover: var(--brand-700);
     --color-success: var(--emerald-600);
     --color-warning: var(--amber-600);
     --color-danger: var(--red-600);
 
-    --space-block: var(--space-4);
-    --space-element: var(--space-2);
-    --space-section: var(--space-12);
     --transition-interact: var(--duration-fast) var(--ease-standard);
-    --radius-surface: var(--radius-xl);
-    --shadow-surface: var(--shadow-xs);
   }
 
   @font-face {
@@ -147,7 +141,10 @@
 
   p { max-width: 65ch; }
 
-  a { color: var(--color-interactive); }
+  a {
+    color: var(--color-interactive);
+    transition: color var(--transition-interact);
+  }
   a:hover { color: var(--color-interactive-hover); }
 
   ::selection {
@@ -163,65 +160,35 @@
   }
 }
 
-
-/* ── Compositions ── */
-
 @layer compositions {
   .flow > * + * { margin-block-start: var(--flow-space, 1rem); }
-
-  .stack {
-    display: flex;
-    flex-direction: column;
-    gap: var(--stack-gap, 1rem);
-  }
-
-  .cluster {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cluster-gap, 0.5rem);
-  }
-
-  .center {
-    max-width: var(--center-max, 42rem);
-    margin-inline: auto;
-    padding-inline: var(--space-block);
-  }
-
-  .region {
-    padding-block: var(--space-section);
-  }
-
+  .stack { display: flex; flex-direction: column; gap: var(--stack-gap, 1rem); }
+  .cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cluster-gap, 0.5rem); }
+  .center { max-width: var(--center-max, 40rem); margin-inline: auto; padding-inline: var(--space-6); }
+  .region { padding-block-start: var(--space-20); padding-block-end: var(--space-16); }
   .spread { justify-content: space-between; }
 }
 
-
-/* ── Blocks ── */
-
 @layer blocks {
-  .card {
-    background-color: var(--color-surface-raised);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-surface);
-    box-shadow: var(--shadow-surface);
-    padding: var(--space-block);
+  .card-group {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border-subtle);
+    box-shadow: var(--shadow-xs);
   }
 
   .card-row {
     background-color: var(--color-surface-raised);
-    border: var(--border-width) solid var(--color-border);
-    padding: var(--space-3) var(--space-block);
-    margin-block-end: calc(-1 * var(--border-width));
+    padding: var(--space-4) var(--space-5);
+    border-block-end: var(--border-width) solid var(--color-border-subtle);
   }
 
-  .card-row:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
-  .card-row:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); margin-block-end: 0; }
-  .card-row:only-child { border-radius: var(--radius-lg); }
+  .card-row:last-child { border-block-end: none; }
 
   .badge {
     display: inline-flex;
     align-items: center;
-    padding-inline: var(--space-element);
+    padding: var(--space-1) var(--space-2);
     font-size: var(--text-nano);
     font-weight: var(--weight-semibold);
     text-transform: uppercase;
@@ -230,48 +197,36 @@
     white-space: nowrap;
     border-radius: var(--radius-sm);
     border: var(--border-width) solid;
-    color: var(--status-color);
-    background-color: color-mix(in srgb, var(--status-color) 8%, transparent);
-    border-color: color-mix(in srgb, var(--status-color) 20%, transparent);
-  }
-
-  .wordmark {
-    font-size: var(--text-body-sm);
-    font-weight: var(--weight-semibold);
-    letter-spacing: var(--tracking-tighter);
+    color: var(--status-color, var(--color-text-muted));
+    background-color: color-mix(in srgb, var(--status-color, var(--color-text-muted)) 8%, transparent);
+    border-color: color-mix(in srgb, var(--status-color, var(--color-text-muted)) 20%, transparent);
   }
 
   .gauge {
     font-family: var(--font-mono);
-    font-size: var(--text-heading);
+    font-size: var(--text-title);
     font-weight: var(--weight-semibold);
     font-variant-numeric: tabular-nums;
     line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tighter);
   }
 
   .divider {
     border: none;
-    border-block-start: var(--border-width) solid var(--color-border);
+    border-block-start: var(--border-width) solid var(--color-border-subtle);
   }
 }
 
-
-/* ── Utilities ── */
-
 @layer utilities {
-  .text-heading {
-    font-size: var(--text-heading);
-    line-height: var(--leading-snug);
-    font-weight: var(--weight-semibold);
-    letter-spacing: var(--tracking-tighter);
-  }
+  .text-title { font-size: var(--text-title); line-height: var(--leading-tight); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-tighter); }
+  .text-heading { font-size: var(--text-heading); line-height: var(--leading-snug); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-tighter); }
+  .text-body-lg { font-size: var(--text-body-lg); line-height: var(--leading-relaxed); }
   .text-body-sm { font-size: var(--text-body-sm); }
   .text-fine { font-size: var(--text-fine); }
   .text-nano { font-size: var(--text-nano); }
-  .text-mono { font-family: var(--font-mono); }
 
   .text-label {
-    font-size: var(--text-fine);
+    font-size: var(--text-micro);
     font-weight: var(--weight-semibold);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider);
@@ -287,18 +242,15 @@
   .weight-semibold { font-weight: var(--weight-semibold); }
 }
 
-
-/* ── Exceptions ── */
-
 @layer exceptions {
-  [data-status="merged"]   { --status-color: var(--color-danger); }
+  [data-status="merged"]    { --status-color: var(--color-danger); }
   [data-status="open"],
   [data-status="active"],
-  [data-status="draft"]    { --status-color: var(--color-warning); }
+  [data-status="draft"]     { --status-color: var(--color-warning); }
   [data-status="verified"],
-  [data-status="available"]{ --status-color: var(--color-success); }
-  [data-status="signed"]   { --status-color: var(--color-danger); }
-  [data-status="enacted"]  { --status-color: var(--color-danger); }
+  [data-status="available"] { --status-color: var(--color-success); }
+  [data-status="signed"],
+  [data-status="enacted"]   { --status-color: var(--color-danger); }
   [data-status="satirical"],
   [data-status="watching"],
   [data-status="none"],
@@ -311,41 +263,39 @@
 <body>
 
 <div class="center region">
-  <div class="stack" style="--stack-gap: var(--space-8)">
+  <div class="stack" style="--stack-gap: var(--space-16)">
 
-    <!-- header -->
-    <header class="stack" style="--stack-gap: var(--space-1)">
-      <div class="wordmark">freeport</div>
-      <p class="text-body-sm color-muted">packages without inspection</p>
+    <header class="stack" style="--stack-gap: var(--space-3)">
+      <h1 class="text-title">freeport</h1>
+      <p class="text-body-lg color-muted">
+        Tracking age verification infrastructure as it enters the Linux
+        package ecosystem. Patches maintained. Packages rebuilt.
+      </p>
     </header>
 
-    <!-- gauges -->
-    <div class="cluster" style="--cluster-gap: var(--space-8)" id="gauges"></div>
+    <div class="stack" style="--stack-gap: var(--space-6)">
+      <div class="cluster" style="--cluster-gap: var(--space-10)" id="gauges"></div>
+      <p class="text-fine color-muted" id="scan-time"></p>
+    </div>
 
-    <p class="text-fine color-muted" id="scan-time"></p>
-
-    <!-- targets -->
-    <section class="stack" style="--stack-gap: var(--space-3)">
+    <section class="stack" style="--stack-gap: var(--space-5)">
       <h2 class="text-label">Upstream threats</h2>
-      <div id="targets"></div>
+      <div class="card-group" id="targets"></div>
     </section>
 
-    <!-- laws -->
-    <section class="stack" style="--stack-gap: var(--space-3)">
+    <section class="stack" style="--stack-gap: var(--space-5)">
       <h2 class="text-label">Legal pressure</h2>
-      <div id="laws"></div>
+      <div class="card-group" id="laws"></div>
     </section>
 
-    <!-- patches -->
-    <section class="stack" style="--stack-gap: var(--space-3)">
+    <section class="stack" style="--stack-gap: var(--space-5)">
       <h2 class="text-label">Patches</h2>
-      <div id="patches"></div>
+      <div class="card-group" id="patches"></div>
     </section>
 
-    <!-- footer -->
-    <footer class="text-fine color-muted">
-      <hr class="divider" style="margin-block-end: var(--space-block)">
-      <div class="cluster" style="--cluster-gap: var(--space-block)">
+    <footer>
+      <hr class="divider" style="margin-block-end: var(--space-6)">
+      <div class="cluster text-fine color-muted" style="--cluster-gap: var(--space-5)">
         <a href="https://github.com/ryandward/freeport">source</a>
         <a href="https://github.com/ryandward/freeport/issues/1">tracking issue</a>
         <span>scanned every 4h</span>
@@ -373,46 +323,46 @@ function render(data) {
   document.getElementById('scan-time').textContent =
     'last scan ' + new Date(data.updated).toUTCString();
 
-  document.getElementById('targets').innerHTML =
-    data.targets.map(target).join('');
-
-  document.getElementById('laws').innerHTML =
-    data.laws.map(law).join('');
-
-  document.getElementById('patches').innerHTML =
-    data.patches.map(patch).join('');
+  document.getElementById('targets').innerHTML = data.targets.map(target).join('');
+  document.getElementById('laws').innerHTML = data.laws.map(law).join('');
+  document.getElementById('patches').innerHTML = data.patches.map(patch).join('');
 }
 
 function gauge(n, label, cls) {
-  return `<div class="stack" style="--stack-gap:0">
+  return `<div class="stack" style="--stack-gap:var(--space-1)">
     <span class="gauge ${cls}">${n}</span>
-    <span class="text-nano color-muted weight-semibold" style="text-transform:uppercase;letter-spacing:var(--tracking-wider)">${label}</span>
+    <span class="text-nano weight-semibold color-muted" style="text-transform:uppercase;letter-spacing:var(--tracking-wider)">${label}</span>
   </div>`;
 }
 
 function target(t) {
   return `<div class="card-row">
-    <div class="cluster spread">
-      <div class="cluster" style="--cluster-gap:var(--space-2)">
-        <span class="text-body-sm weight-semibold">${t.project}</span>
-        <span class="text-fine color-muted">${t.component}</span>
+    <div class="stack" style="--stack-gap:var(--space-2)">
+      <div class="cluster spread">
+        <div class="cluster" style="--cluster-gap:var(--space-3)">
+          <span class="text-body-sm weight-semibold">${t.project}</span>
+          <span class="text-fine color-muted weight-medium">${t.component}</span>
+        </div>
+        <span class="badge" data-status="${t.status}">${t.status}</span>
       </div>
-      <span class="badge" data-status="${t.status}">${t.status}</span>
+      <p class="text-body-sm" style="max-width:50ch">${t.threat}</p>
+      <div class="cluster text-fine color-muted" style="--cluster-gap:var(--space-4)">
+        <a href="${t.pr}">${t.pr_num}</a>
+        <span>${t.author}</span>
+        <span class="badge" data-status="${t.patch}">${t.patch}</span>
+      </div>
+      ${t.notes ? `<p class="text-fine color-muted">${t.notes}</p>` : ''}
     </div>
-    <p class="text-body-sm" style="margin-block-start:var(--space-1)">${t.threat}</p>
-    <div class="cluster text-fine color-muted" style="margin-block-start:var(--space-1);--cluster-gap:var(--space-3)">
-      <a href="${t.pr}">${t.pr_num}</a>
-      <span>by ${t.author}</span>
-      <span class="badge" data-status="${t.patch}">patch: ${t.patch}</span>
-    </div>
-    ${t.notes ? `<p class="text-fine color-muted" style="margin-block-start:var(--space-1)">${t.notes}</p>` : ''}
   </div>`;
 }
 
 function law(l) {
   return `<div class="card-row">
     <div class="cluster spread">
-      <span class="text-body-sm weight-semibold">${l.jurisdiction} <span class="weight-medium color-muted">${l.bill}</span></span>
+      <div class="cluster" style="--cluster-gap:var(--space-3)">
+        <span class="text-body-sm weight-semibold">${l.jurisdiction}</span>
+        <span class="text-fine color-muted weight-medium">${l.bill}</span>
+      </div>
       <span class="badge" data-status="${l.status}">${l.status}</span>
     </div>
     ${l.effective ? `<p class="text-fine color-muted" style="margin-block-start:var(--space-1)">effective ${l.effective}</p>` : ''}
@@ -422,7 +372,10 @@ function law(l) {
 function patch(p) {
   return `<div class="card-row">
     <div class="cluster spread">
-      <span class="text-body-sm weight-semibold">${p.package} <span class="weight-medium color-muted">${p.distro}</span></span>
+      <div class="cluster" style="--cluster-gap:var(--space-3)">
+        <span class="text-body-sm weight-semibold">${p.package}</span>
+        <span class="text-fine color-muted weight-medium">${p.distro}</span>
+      </div>
       <span class="badge" data-status="${p.status}">${p.status}</span>
     </div>
   </div>`;
