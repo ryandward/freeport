@@ -104,17 +104,17 @@
     "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* ── Type scale ──
-     Even-pixel rem sizes for clean subpixel rendering.
-     Bumped base to 18px via html font-size for readability
-     on wide-audience pages. */
-  --text-fine:    0.75rem;
-  --text-body-sm: 0.875rem;
-  --text-body:    1rem;
-  --text-body-lg: 1.125rem;
-  --text-heading: clamp(1.375rem, 2vw, 1.75rem);
-  --text-title:   clamp(1.75rem, 3vw, 2.5rem);
-  --text-display: clamp(2.5rem,  5vw,  3.5rem);
-  --text-hero:    clamp(3rem,    6vw,   5rem);
+     em-based so children inherit from parent context.
+     Body sets 1em. Blocks set their own base and
+     children scale proportionally. */
+  --text-fine:    0.75em;
+  --text-body-sm: 0.875em;
+  --text-body:    1em;
+  --text-body-lg: 1.125em;
+  --text-heading: 1.375em;
+  --text-title:   1.75em;
+  --text-display: 2.5em;
+  --text-hero:    3.5em;
 
   /* ── Leading (line-height) ── */
   --leading-none:    1;
@@ -422,14 +422,9 @@
 
 /* ── Element styles ── */
 
-html {
-  font-size: 18px;
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: var(--font-body);
-  font-size: var(--text-body);
+  font-size: 100%;  /* inherits browser default (16px), single source of truth */
   font-weight: var(--weight-normal);
   font-optical-sizing: auto;
   line-height: var(--leading-normal);
