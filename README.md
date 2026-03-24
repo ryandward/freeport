@@ -4,6 +4,8 @@
 
 # freeport
 
+**[https://ryandward.github.io/freeport](https://ryandward.github.io/freeport/)**
+
 **freeport is not an operating system.** Laws like California's AB 1043
 target operating system distributors. This is not one. This is a project
 for people who believe your computer shouldn't willingly hand over your
