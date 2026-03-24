@@ -4,282 +4,278 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>freeport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap');
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #0a0a0a;
-  --fg: #b0b0b0;
-  --dim: #505050;
-  --bright: #d4d4d4;
-  --red: #cc4444;
-  --green: #44aa44;
-  --yellow: #bbaa33;
-  --blue: #4477aa;
-  --border: #1a1a1a;
+  --bg: #F3F3F7;
+  --fg: #0A0A0C;
+  --card: #FFFFFF;
+  --muted: #6E7087;
+  --border: #E4E4EC;
+  --red: #DC2626;
+  --red-subtle: #FEF2F2;
+  --red-border: #FECACA;
+  --amber: #D97706;
+  --amber-subtle: #FFFBEB;
+  --amber-border: #FDE68A;
+  --green: #059669;
+  --green-subtle: #F0FDF6;
+  --green-border: #A7F3D0;
+  --dim: #9CA3AF;
 }
 
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  line-height: 1.6;
-  padding: 40px 20px;
-  max-width: 960px;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  letter-spacing: -0.011em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  padding: 48px 24px;
+  max-width: 720px;
   margin: 0 auto;
+  line-height: 1.5;
 }
 
-a { color: var(--blue); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { color: var(--fg); }
+a:hover { opacity: 0.7; }
 
-h1 {
-  color: var(--bright);
-  font-size: 16px;
+.header { margin-bottom: 48px; }
+
+.title {
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 4px;
+  letter-spacing: -0.04em;
+  margin-bottom: 2px;
 }
 
-.subtitle {
-  color: var(--dim);
+.tagline {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.counts {
+  display: flex;
+  gap: 24px;
   margin-bottom: 40px;
 }
 
-.updated {
-  color: var(--dim);
-  font-size: 11px;
-  margin-bottom: 32px;
-}
-
-.section-label {
-  color: var(--dim);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 12px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--border);
-}
-
-.target {
-  margin-bottom: 20px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.target:last-child { border-bottom: none; }
-
-.target-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.target-name {
-  color: var(--bright);
-  font-weight: 600;
-}
-
-.target-component {
-  color: var(--dim);
-}
-
-.status {
-  font-size: 11px;
-  padding: 1px 6px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.status-merged { color: var(--red); }
-.status-open, .status-active { color: var(--yellow); }
-.status-draft { color: var(--dim); }
-.status-satirical { color: var(--dim); font-style: italic; }
-
-.target-threat {
-  color: var(--fg);
-  margin: 4px 0;
-}
-
-.target-meta {
-  color: var(--dim);
-  font-size: 11px;
-}
-
-.target-meta span { margin-right: 16px; }
-
-.patch-status { font-size: 11px; }
-.patch-available { color: var(--green); }
-.patch-draft { color: var(--yellow); }
-.patch-none { color: var(--dim); }
-.patch-watching { color: var(--blue); }
-
-.laws {
-  margin-bottom: 40px;
-}
-
-.law {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.law:last-child { border-bottom: none; }
-
-.law-name { color: var(--bright); }
-.law-status { color: var(--dim); font-size: 11px; }
-.law-effective { color: var(--yellow); font-size: 11px; }
-.law-signed { color: var(--red); }
-
-.section { margin-bottom: 40px; }
-
-.footer {
-  margin-top: 60px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-  color: var(--dim);
-  font-size: 11px;
-}
-
-.footer a { color: var(--dim); }
-.footer a:hover { color: var(--fg); }
-
-.count-row {
-  display: flex;
-  gap: 32px;
-  margin-bottom: 40px;
-}
-
-.count {
-  display: flex;
-  flex-direction: column;
-}
+.count-item { display: flex; flex-direction: column; }
 
 .count-num {
-  color: var(--bright);
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 600;
-  line-height: 1;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 
 .count-label {
-  color: var(--dim);
   font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.04em;
 }
 
-.blink {
-  animation: blink 2s steps(1) infinite;
+.section { margin-bottom: 32px; }
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 10px;
 }
 
-@keyframes blink {
-  50% { opacity: 0.3; }
+.row {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  margin-bottom: -1px;
 }
+
+.row:first-of-type { border-radius: 8px 8px 0 0; }
+.row:last-of-type { border-radius: 0 0 8px 8px; margin-bottom: 0; }
+.row:only-of-type { border-radius: 8px; }
+
+.row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.row-project {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.row-component {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1px 8px;
+  border-radius: 9999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.badge[data-status="merged"] {
+  color: var(--red);
+  background: var(--red-subtle);
+  border-color: var(--red-border);
+}
+
+.badge[data-status="open"],
+.badge[data-status="active"],
+.badge[data-status="draft"] {
+  color: var(--amber);
+  background: var(--amber-subtle);
+  border-color: var(--amber-border);
+}
+
+.badge[data-status="verified"] {
+  color: var(--green);
+  background: var(--green-subtle);
+  border-color: var(--green-border);
+}
+
+.badge[data-status="satirical"],
+.badge[data-status="watching"] {
+  color: var(--muted);
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+.row-threat {
+  font-size: 13px;
+  color: var(--fg);
+  margin-top: 4px;
+}
+
+.row-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.row-meta a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.row-meta a:hover { color: var(--fg); opacity: 1; }
+
+.row-notes {
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 2px;
+}
+
+.scan-time {
+  font-size: 11px;
+  color: var(--dim);
+  margin-bottom: 32px;
+}
+
+.footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.footer a:hover { color: var(--fg); opacity: 1; }
 </style>
 </head>
 <body>
 
-<h1>freeport</h1>
-<div class="subtitle">packages without inspection</div>
+<div class="header">
+  <div class="title">freeport</div>
+  <div class="tagline">packages without inspection</div>
+</div>
 
-<div class="count-row" id="counts"></div>
-<div class="updated" id="updated"></div>
+<div class="counts" id="counts"></div>
+<div class="scan-time" id="scan-time"></div>
 
 <div class="section">
-  <div class="section-label">upstream threats</div>
+  <div class="section-title">Upstream threats</div>
   <div id="targets"></div>
 </div>
 
-<div class="section laws">
-  <div class="section-label">legal pressure</div>
+<div class="section">
+  <div class="section-title">Legal pressure</div>
   <div id="laws"></div>
 </div>
 
 <div class="section">
-  <div class="section-label">patches</div>
+  <div class="section-title">Patches</div>
   <div id="patches"></div>
 </div>
 
 <div class="footer">
   <a href="https://github.com/ryandward/freeport">source</a> &middot;
   <a href="https://github.com/ryandward/freeport/issues/1">tracking issue</a> &middot;
-  updated every 4 hours by CI
+  scanned every 4 hours
 </div>
 
 <script>
-fetch('data.json')
-  .then(r => r.json())
-  .then(data => {
-    // counts
-    const merged = data.targets.filter(t => t.status === 'merged').length;
-    const active = data.targets.filter(t => ['open', 'draft', 'active'].includes(t.status)).length;
-    const patchReady = data.patches.filter(p => p.status === 'verified').length;
+fetch('data.json').then(r => r.json()).then(data => {
+  const merged = data.targets.filter(t => t.status === 'merged').length;
+  const active = data.targets.filter(t => ['open','draft','active'].includes(t.status)).length;
+  const ready = data.patches.filter(p => p.status === 'verified').length;
 
-    document.getElementById('counts').innerHTML = `
-      <div class="count"><span class="count-num" style="color:var(--red)">${merged}</span><span class="count-label">merged upstream</span></div>
-      <div class="count"><span class="count-num" style="color:var(--yellow)">${active}</span><span class="count-label">in progress</span></div>
-      <div class="count"><span class="count-num" style="color:var(--green)">${patchReady}</span><span class="count-label">patches ready</span></div>
-      <div class="count"><span class="count-num">${data.targets.length}</span><span class="count-label">tracked</span></div>
-    `;
+  document.getElementById('counts').innerHTML =
+    `<div class="count-item"><span class="count-num" style="color:var(--red)">${merged}</span><span class="count-label">merged</span></div>` +
+    `<div class="count-item"><span class="count-num" style="color:var(--amber)">${active}</span><span class="count-label">in progress</span></div>` +
+    `<div class="count-item"><span class="count-num" style="color:var(--green)">${ready}</span><span class="count-label">patched</span></div>` +
+    `<div class="count-item"><span class="count-num">${data.targets.length}</span><span class="count-label">tracked</span></div>`;
 
-    // updated
-    const d = new Date(data.updated);
-    document.getElementById('updated').textContent = 'last scan: ' + d.toUTCString();
+  document.getElementById('scan-time').textContent =
+    'last scan ' + new Date(data.updated).toUTCString();
 
-    // targets
-    document.getElementById('targets').innerHTML = data.targets.map(t => `
-      <div class="target">
-        <div class="target-header">
-          <div>
-            <span class="target-name">${t.project}</span>
-            <span class="target-component">${t.component}</span>
-          </div>
-          <span class="status status-${t.status}">${t.status === 'merged' ? '&#9679; ' : ''}${t.status}</span>
-        </div>
-        <div class="target-threat">${t.threat}</div>
-        <div class="target-meta">
-          <span><a href="${t.pr}">${t.pr_num}</a></span>
-          <span>by ${t.author}</span>
-          <span class="patch-status patch-${t.patch}">patch: ${t.patch}</span>
-        </div>
-        ${t.notes ? `<div class="target-meta" style="margin-top:2px">${t.notes}</div>` : ''}
+  document.getElementById('targets').innerHTML = data.targets.map(t =>
+    `<div class="row">
+      <div class="row-top">
+        <div><span class="row-project">${t.project}</span> <span class="row-component">${t.component}</span></div>
+        <span class="badge" data-status="${t.status}">${t.status}</span>
       </div>
-    `).join('');
+      <div class="row-threat">${t.threat}</div>
+      <div class="row-meta"><a href="${t.pr}">${t.pr_num}</a> by ${t.author} &middot; patch: <span class="badge" data-status="${t.patch}">${t.patch}</span></div>
+      ${t.notes ? `<div class="row-notes">${t.notes}</div>` : ''}
+    </div>`
+  ).join('');
 
-    // laws
-    document.getElementById('laws').innerHTML = data.laws.map(l => `
-      <div class="law">
-        <div>
-          <span class="law-name">${l.jurisdiction}</span>
-          <span class="law-status">${l.bill}</span>
-        </div>
-        <div>
-          <span class="law-effective ${l.status === 'signed' ? 'law-signed' : ''}">${l.status}${l.effective ? ' / ' + l.effective : ''}</span>
-        </div>
+  document.getElementById('laws').innerHTML = data.laws.map(l =>
+    `<div class="row">
+      <div class="row-top">
+        <span class="row-project">${l.jurisdiction} ${l.bill}</span>
+        <span class="badge" data-status="${l.status === 'signed' ? 'merged' : 'open'}">${l.status}</span>
       </div>
-    `).join('');
+      ${l.effective ? `<div class="row-meta">effective ${l.effective}</div>` : ''}
+    </div>`
+  ).join('');
 
-    // patches
-    document.getElementById('patches').innerHTML = data.patches.map(p => `
-      <div class="law">
-        <div>
-          <span class="law-name">${p.package}</span>
-          <span class="law-status">${p.distro}</span>
-        </div>
-        <div>
-          <span class="patch-status patch-${p.status === 'verified' ? 'available' : p.status}">${p.status}</span>
-        </div>
+  document.getElementById('patches').innerHTML = data.patches.map(p =>
+    `<div class="row">
+      <div class="row-top">
+        <div><span class="row-project">${p.package}</span> <span class="row-component">${p.distro}</span></div>
+        <span class="badge" data-status="${p.status}">${p.status}</span>
       </div>
-    `).join('');
-  });
+    </div>`
+  ).join('');
+});
 </script>
-
 </body>
 </html>
