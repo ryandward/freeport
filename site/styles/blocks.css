@@ -9,6 +9,21 @@
  */
 
 
+/* ── GPU layer promotion for card surfaces ──
+   Rule 2 from quirks.md: promote elements with
+   border-radius + box-shadow to their own GPU layer
+   so text rasterizes as a clean texture. */
+
+.stat-card,
+.threat-card,
+.info-card,
+.card {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+
 /* ── App Sidebar ── */
 
 .app-sidebar {
