@@ -93,7 +93,7 @@
 }
 
 
-/* ── Card Group (stacked rows) ── */
+/* ── Card Group (stacked rows for compact lists) ── */
 
 .card-group {
   border-radius: var(--radius-surface);
@@ -103,57 +103,67 @@
 }
 
 
-/* ── Threat Row ── */
+/* ── Threat List ── */
 
-.threat-row {
+.threat-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-element);
+}
+
+
+/* ── Threat Card (individual cards, not rows) ── */
+
+.threat-card {
   background-color: var(--color-surface-raised);
-  padding: var(--space-inline);
-  border-block-end: var(--border-width) solid var(--color-border-frosted);
+  border: var(--border-width) solid var(--color-border-frosted);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-surface);
+  padding: var(--space-section) var(--space-inline);
 }
 
-.threat-row:last-child {
-  border-block-end: none;
-}
-
-.threat-row > * + * {
+.threat-card > * + * {
   margin-block-start: var(--space-element);
 }
 
-.threat-row header {
+.threat-card header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-element);
 }
 
-.threat-row header strong {
-  font-size: var(--text-body);
+.threat-card header strong {
+  font-size: var(--text-body-lg);
   font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
 }
 
-.threat-row header em {
+.threat-card header em {
   font-style: normal;
   font-size: var(--text-body-sm);
   font-weight: var(--weight-medium);
   color: var(--color-text-muted);
 }
 
-.threat-row p {
+.threat-card p {
   font-size: var(--text-body);
   line-height: var(--leading-relaxed);
 }
 
-.threat-row footer {
+.threat-card footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-block);
-  font-size: var(--text-fine);
+  font-size: var(--text-body-sm);
   color: var(--color-text-muted);
+  padding-block-start: var(--space-element);
+  border-block-start: var(--border-width) solid var(--color-border-frosted);
 }
 
-.threat-row .notes {
-  font-size: var(--text-fine);
+.threat-card .notes {
+  font-size: var(--text-body-sm);
   color: var(--color-text-muted);
 }
 
@@ -233,7 +243,12 @@
 /* ── Section ── */
 
 .section > * + * {
-  margin-block-start: var(--space-block);
+  margin-block-start: var(--space-inline);
+}
+
+.section > h2 {
+  font-size: var(--text-heading);
+  margin-block-end: var(--space-element);
 }
 
 

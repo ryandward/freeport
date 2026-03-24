@@ -19,7 +19,7 @@
       <a class="app-nav-link" href="#threats">Upstream threats</a>
       <a class="app-nav-link" href="#laws">Legal pressure</a>
       <a class="app-nav-link" href="#patches">Patches</a>
-      <a class="app-nav-link" href="https://github.com/ryandward/freeport">Source</a>
+      <a class="app-nav-link" href="https://github.com/ryandward/freeport">GitHub</a>
       <a class="app-nav-link" href="https://github.com/ryandward/freeport/issues/1">Tracking issue</a>
     </nav>
   </aside>
@@ -42,7 +42,7 @@
 
         <section class="section" id="threats">
           <h2>Upstream threats</h2>
-          <div class="card-group" id="targets"></div>
+          <div class="threat-list" id="targets"></div>
         </section>
 
         <section class="section" id="laws">
@@ -95,7 +95,7 @@ function stat(n, label, cls) {
 }
 
 function target(t) {
-  return '<div class="threat-row">' +
+  return '<div class="threat-card">' +
     '<header>' +
       '<div><strong>' + t.project + '</strong> <em>' + t.component + '</em></div>' +
       '<span class="badge" data-status="' + t.status + '">' + t.status + '</span>' +
