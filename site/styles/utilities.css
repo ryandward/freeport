@@ -92,18 +92,8 @@
 }
 
 
-/* ── Micro ── */
-
-.text-micro {
-  font-size: var(--text-micro);
-}
-
-
-/* ── Nano ── */
-
-.text-nano {
-  font-size: var(--text-nano);
-}
+/* text-micro and text-nano removed: odd pixel sizes
+   render poorly at non-retina DPIs. Use text-fine. */
 
 
 /* ── Mono ── */

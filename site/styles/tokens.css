@@ -104,12 +104,10 @@
     "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* ── Type scale ──
-     10 steps: stablekit's defined sizes + natural interpolations.
-     nano → micro → fine → body-sm → body → body-lg → heading → title → display → hero */
-  --text-nano:    10px;
-  --text-micro:   11px;
-  --text-fine:    12px;
-  --text-body-sm: 13px;
+     Even-pixel sizes for clean subpixel rendering across DPIs.
+     fine → body-sm → body → body-lg → heading → title → display → hero */
+  --text-fine:    0.75rem;
+  --text-body-sm: 0.875rem;
   --text-body:    1rem;
   --text-body-lg: 1.125rem;
   --text-heading: clamp(1.25rem, 1.5vw, 1.5rem);
