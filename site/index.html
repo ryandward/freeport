@@ -47,6 +47,11 @@
           <div class="threat-list" id="patches-list"></div>
         </section>
 
+        <section class="section" id="actors">
+          <h2>Leaderboard</h2>
+          <div class="threat-list" id="actors-list"></div>
+        </section>
+
         <section class="section" id="laws">
           <h2>Legal pressure</h2>
           <p>
@@ -88,6 +93,28 @@ function render(data) {
 
   document.getElementById('targets').innerHTML = data.targets.map(target).join('');
   document.getElementById('patches-list').innerHTML = data.patches.map(patch).join('');
+
+  // leaderboard: count PRs per author, sort descending
+  var counts = {};
+  var repos = {};
+  data.targets.forEach(function(t) {
+    if (!t.author || t.author === 'unknown') return;
+    counts[t.author] = (counts[t.author] || 0) + 1;
+    if (!repos[t.author]) repos[t.author] = [];
+    if (repos[t.author].indexOf(t.project) === -1) repos[t.author].push(t.project);
+  });
+  var leaders = Object.keys(counts).map(function(a) {
+    return { author: a, count: counts[a], projects: repos[a] };
+  }).sort(function(a, b) { return b.count - a.count; });
+
+  document.getElementById('actors-list').innerHTML = leaders.map(function(l, i) {
+    return '<div class="info-card">' +
+      '<header>' +
+        '<div><strong>' + (i + 1) + '. ' + l.author + '</strong> <em>' + l.projects.join(', ') + '</em></div>' +
+        '<span class="badge" data-status="active">' + l.count + ' PR' + (l.count > 1 ? 's' : '') + '</span>' +
+      '</header>' +
+    '</div>';
+  }).join('');
 }
 
 function stat(n, label, cls) {
