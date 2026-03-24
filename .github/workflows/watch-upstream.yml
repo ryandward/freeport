@@ -128,6 +128,32 @@ jobs:
             sleep 1
           done
 
+          # scan freedesktop GitLab (accountsservice, xdg-specs)
+          echo "scanning freedesktop GitLab..."
+          fd_projects=(
+            "accountsservice%2Faccountsservice"  # accountsservice
+            "xdg%2Fxdg-specs"                    # xdg specs
+          )
+
+          for pid in "${fd_projects[@]}"; do
+            curl -s "https://gitlab.freedesktop.org/api/v4/projects/${pid}/merge_requests?state=all&per_page=20" | \
+              jq -r '.[]? | "\(.iid)|\(.title)|\(.state)|\(.web_url)|\(.author.username)"' 2>/dev/null > /tmp/fd_results.txt || true
+
+            while IFS='|' read -r iid title state url author; do
+              [ -z "$iid" ] && continue
+              lower_title=$(echo "$title" | tr '[:upper:]' '[:lower:]')
+              if ! echo "$lower_title" | grep -qE "birth|age.verif|age.assur|age.signal|parental"; then
+                continue
+              fi
+              key="fd:${pid}!${iid}"
+              if ! grep -qF "$key" .tracking/seen.txt; then
+                echo "FOUND: freedesktop ${key} [${state}] ${title} by ${author}"
+                printf "FREEDESKTOP %s [%s] %s (by %s)\n  %s\n\n" "${key}" "${state}" "${title}" "${author}" "${url}" >> /tmp/findings.txt
+                echo "$key" >> .tracking/seen.txt
+              fi
+            done < /tmp/fd_results.txt
+          done
+
           # scan Arch GitLab (pacman, archinstall, etc)
           echo "scanning Arch GitLab..."
           gitlab_projects=(
@@ -221,7 +247,8 @@ jobs:
           targets = [
               {'project':'systemd','repo':'systemd/systemd','component':'userdb','threat':'birthDate field in user records, --birth-date flag in homectl','pr_num':'#40954','pr':'https://github.com/systemd/systemd/pull/40954','author':'dylanmtaylor','patch':'available','notes':'Revert PR #41179 was closed, not merged. Code remains in main.'},
               {'project':'xdg-desktop-portal','repo':'flatpak/xdg-desktop-portal','component':'ParentalControls portal','threat':'QueryAgeBracket D-Bus method exposing user age ranges to apps','pr_num':'#1922','pr':'https://github.com/flatpak/xdg-desktop-portal/pull/1922','author':'davidedmundson','patch':'draft','notes':'KDE core developer. PR locked after heated debate.'},
-              {'project':'accountsservice','repo':'accountsservice/accountsservice','component':'user accounts','threat':'BirthDate property with polkit-gated Get/Set methods','pr_num':'MR !176','pr':'https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176','author':'unknown','patch':'none','notes':'D-Bus layer for desktop birth date storage.'},
+              {'project':'accountsservice','repo':'accountsservice/accountsservice','component':'user accounts','threat':'BirthDate property with polkit-gated Get/Set methods','pr_num':'MR !176','pr':'https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176','author':'dylanmtaylor','patch':'none','notes':'Same author as systemd and archinstall PRs.'},
+              {'project':'xdg-specs','repo':'xdg/xdg-specs','component':'XDG specification','threat':'Age Verification Signal Specification for freedesktop','pr_num':'MR !113','pr':'https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113','author':'dylanmtaylor','patch':'n/a','notes':'Closed. Attempt to formalize age verification as an official XDG spec.'},
               {'project':'archinstall','repo':'archlinux/archinstall','component':'installer','threat':'Required birth date field during user creation','pr_num':'#4290','pr':'https://github.com/archlinux/archinstall/pull/4290','author':'dylanmtaylor','patch':'none','notes':'Same author as systemd PR. Writes to userdb.'},
               {'project':'elementary OS','repo':'elementary/settings-useraccounts','component':'user settings','threat':'Age declaration UI in account creation','pr_num':'#270','pr':'https://github.com/elementary/settings-useraccounts/pull/270','author':'danirabbit','patch':'none','notes':'Author is the elementary OS founder.'},
               {'project':'elementary OS','repo':'elementary/portals','component':'desktop portals','threat':'Account portal exposing user info to applications','pr_num':'#180','pr':'https://github.com/elementary/portals/pull/180','author':'danirabbit','patch':'none','notes':'Portal-layer integration for age data.'},
