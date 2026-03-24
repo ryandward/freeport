@@ -97,7 +97,7 @@
   /* ── Typography ──
      Inter: geometric humanist with excellent optical sizing.
      Monospace stack prefers system UI monospace. */
-  --font-sans: "Inter Variable", "Inter", "Inter Fallback", ui-sans-serif, system-ui,
+  --font-sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui,
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code",
@@ -430,7 +430,7 @@ body {
   line-height: var(--leading-normal);
   color: var(--color-text);
   background-color: var(--color-surface);
-  text-rendering: auto;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
