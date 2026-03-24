@@ -106,7 +106,7 @@ function render(data) {
   });
   var leaders = Object.keys(counts).map(function(a) {
     return { author: a, count: counts[a], projects: repos[a] };
-  }).sort(function(a, b) { return b.count - a.count; });
+  }).filter(function(l) { return l.count > 1; }).sort(function(a, b) { return b.count - a.count; });
 
   document.getElementById('actors-list').innerHTML = leaders.map(function(l, i) {
     return '<div class="info-card">' +
