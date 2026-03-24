@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-24T06:53:24Z",
+  "updated": "2026-03-24T08:11:57Z",
   "targets": [
     {
       "project": "systemd",
@@ -32,9 +32,21 @@
       "threat": "BirthDate property with polkit-gated Get/Set methods",
       "pr_num": "MR !176",
       "pr": "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176",
-      "author": "unknown",
+      "author": "dylanmtaylor",
       "patch": "none",
-      "notes": "D-Bus layer for desktop birth date storage.",
+      "notes": "Same author as systemd and archinstall PRs.",
+      "status": "open"
+    },
+    {
+      "project": "xdg-specs",
+      "repo": "xdg/xdg-specs",
+      "component": "XDG specification",
+      "threat": "Age Verification Signal Specification for freedesktop",
+      "pr_num": "MR !113",
+      "pr": "https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113",
+      "author": "dylanmtaylor",
+      "patch": "n/a",
+      "notes": "Closed. Attempt to formalize age verification as an official XDG spec.",
       "status": "open"
     },
     {
@@ -96,36 +108,6 @@
       "patch": "n/a",
       "notes": "Standalone daemon. SetAge, SetDateOfBirth, GetAgeBracket methods.",
       "status": "active"
-    }
-  ],
-  "laws": [
-    {
-      "jurisdiction": "California",
-      "bill": "AB 1043",
-      "status": "signed",
-      "effective": "2027-01-01",
-      "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB1043"
-    },
-    {
-      "jurisdiction": "Colorado",
-      "bill": "SB 26-051",
-      "status": "in progress",
-      "effective": "TBD",
-      "url": "https://leg.colorado.gov/bills/sb26-051"
-    },
-    {
-      "jurisdiction": "Brazil",
-      "bill": "Lei 15.211",
-      "status": "enacted",
-      "effective": "2025",
-      "url": ""
-    },
-    {
-      "jurisdiction": "Illinois",
-      "bill": "SB3977",
-      "status": "in progress",
-      "effective": "TBD",
-      "url": ""
     }
   ],
   "patches": [
