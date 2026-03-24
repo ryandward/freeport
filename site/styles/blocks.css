@@ -168,37 +168,40 @@
 }
 
 
-/* ── Compact Row (laws, patches) ── */
+/* ── Info Card (laws, patches — same pattern as threat-card, less dense) ── */
 
-.compact-row {
+.info-card {
   background-color: var(--color-surface-raised);
+  border: var(--border-width) solid var(--color-border-frosted);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-surface);
   padding: var(--space-block) var(--space-inline);
-  border-block-end: var(--border-width) solid var(--color-border-frosted);
+}
+
+.info-card header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-element);
 }
 
-.compact-row:last-child {
-  border-block-end: none;
-}
-
-.compact-row strong {
-  font-size: var(--text-body-sm);
+.info-card header strong {
+  font-size: var(--text-body);
   font-weight: var(--weight-semibold);
 }
 
-.compact-row em {
+.info-card header em {
   font-style: normal;
   font-size: var(--text-body-sm);
   font-weight: var(--weight-medium);
   color: var(--color-text-muted);
 }
 
-.compact-row small {
+.info-card small {
   display: block;
   margin-block-start: var(--space-tight);
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
 }
 
 

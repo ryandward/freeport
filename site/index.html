@@ -47,12 +47,12 @@
 
         <section class="section" id="laws">
           <h2>Legal pressure</h2>
-          <div class="card-group" id="laws-list"></div>
+          <div class="threat-list" id="laws-list"></div>
         </section>
 
         <section class="section" id="patches">
           <h2>Patches</h2>
-          <div class="card-group" id="patches-list"></div>
+          <div class="threat-list" id="patches-list"></div>
         </section>
 
         <footer class="page-footer">
@@ -111,18 +111,21 @@ function target(t) {
 }
 
 function law(l) {
-  return '<div class="compact-row">' +
-    '<div><strong>' + l.jurisdiction + '</strong> <em>' + l.bill + '</em>' +
-      (l.effective ? '<small>effective ' + l.effective + '</small>' : '') +
-    '</div>' +
-    '<span class="badge" data-status="' + l.status + '">' + l.status + '</span>' +
+  return '<div class="info-card">' +
+    '<header>' +
+      '<div><strong>' + l.jurisdiction + '</strong> <em>' + l.bill + '</em></div>' +
+      '<span class="badge" data-status="' + l.status + '">' + l.status + '</span>' +
+    '</header>' +
+    (l.effective ? '<small>effective ' + l.effective + '</small>' : '') +
   '</div>';
 }
 
 function patch(p) {
-  return '<div class="compact-row">' +
-    '<div><strong>' + p.package + '</strong> <em>' + p.distro + '</em></div>' +
-    '<span class="badge" data-status="' + p.status + '">' + p.status + '</span>' +
+  return '<div class="info-card">' +
+    '<header>' +
+      '<div><strong>' + p.package + '</strong> <em>' + p.distro + '</em></div>' +
+      '<span class="badge" data-status="' + p.status + '">' + p.status + '</span>' +
+    '</header>' +
   '</div>';
 }
 </script>
