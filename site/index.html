@@ -43,6 +43,8 @@
         <section class="section" id="threats">
           <h2>Upstream threats</h2>
           <div class="threat-list" id="targets"></div>
+          <h2>Patches</h2>
+          <div class="threat-list" id="patches-list"></div>
         </section>
 
         <section class="section" id="laws">
@@ -55,11 +57,6 @@
             SB3977 is in progress. These laws are why the upstream
             projects above are building age verification infrastructure.
           </p>
-        </section>
-
-        <section class="section" id="patches">
-          <h2>Patches</h2>
-          <div class="threat-list" id="patches-list"></div>
         </section>
 
         <footer class="page-footer">
@@ -117,11 +114,13 @@ function target(t) {
 }
 
 function patch(p) {
+  var url = 'https://github.com/ryandward/freeport/blob/main/' + p.file;
   return '<div class="info-card">' +
     '<header>' +
       '<div><strong>' + p.package + '</strong> <em>' + p.distro + '</em></div>' +
       '<span class="badge" data-status="' + p.status + '">' + p.status + '</span>' +
     '</header>' +
+    '<small><a href="' + url + '">view patch</a></small>' +
   '</div>';
 }
 </script>
