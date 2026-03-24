@@ -163,6 +163,7 @@
 
 .threat-card p {
   font-size: var(--text-body);
+  font-weight: var(--weight-medium);
   line-height: var(--leading-relaxed);
 }
 
