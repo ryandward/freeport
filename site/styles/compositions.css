@@ -1,0 +1,134 @@
+/*
+ * Compositions — layout primitives
+ *
+ * CUBE "C" layer. Geometry only.
+ * These create the spatial skeleton of the page.
+ *
+ * ALLOWED:  display, flex, grid, gap, padding, margin, width, height,
+ *           position, align-items, justify-content, overflow, aspect-ratio
+ *
+ * BANNED:   color, background, border-color, box-shadow, font-*,
+ *           opacity, transform (visual), text-*, fill, stroke,
+ *           numeric literals (values come from tokens)
+ *
+ * Every composition is a reusable layout pattern, not a component.
+ * Components live in blocks.css and USE compositions.
+ */
+
+
+/* ── App Layout: fixed sidebar + scrollable content ── */
+
+.app-layout {
+  display: grid;
+  grid-template-columns: var(--app-sidebar-width) var(--app-content-width);
+  height: var(--app-layout-height);
+  overflow: hidden;
+}
+
+.app-layout__content {
+  overflow-y: scroll;
+  height: var(--app-layout-height);
+  padding-block-end: var(--app-layout-height);
+}
+
+.app-sidebar {
+  --stack-gap: var(--space-section);
+}
+
+.app-sidebar nav {
+  --stack-gap: var(--space-tight);
+}
+
+
+/* ── Flow: vertical rhythm between siblings ── */
+
+.flow > * + * {
+  margin-block-start: var(--flow-space);
+}
+
+
+/* ── Stack: vertical flex with gap ── */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap);
+}
+
+
+/* ── Cluster: horizontal flex with wrapping ── */
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-gap);
+}
+
+
+/* ── Grid: auto-fill responsive grid ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--grid-min), var(--grid-max))
+  );
+  gap: var(--grid-gap);
+}
+
+
+/* ── Bottombar: content above, bar pinned below ── */
+
+.bottombar {
+  display: grid;
+  grid-template-rows: var(--bottombar-main) var(--bottombar-height);
+  gap: var(--bottombar-gap);
+}
+
+
+/* ── Sidebar: main content + side panel ── */
+
+.sidebar {
+  display: grid;
+  grid-template-columns: var(--sidebar-main-width) var(--sidebar-width);
+  gap: var(--sidebar-gap);
+  align-items: start;
+}
+
+
+/* ── Center: max-width + auto margins ── */
+
+.center {
+  max-width: var(--center-max);
+  margin-inline: auto;
+  padding-inline: var(--center-padding);
+}
+
+
+/* ── Region: vertical section spacing ── */
+
+.region {
+  padding-block-start: var(--region-padding);
+  padding-block-end: var(--region-padding-end);
+}
+
+
+/* ── Sticky Panel: sticks below nav, fills sidebar column ── */
+
+.sticky-panel {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-inline);
+  padding-inline: var(--space-inline);
+  padding-bottom: var(--space-inline);
+}
+
+
+/* ── Spread: push children to opposite ends ── */
+
+.spread {
+  justify-content: space-between;
+}

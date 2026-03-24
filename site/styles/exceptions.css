@@ -1,0 +1,261 @@
+/*
+ * Exceptions — data-attribute state variations
+ *
+ * CUBE "E" layer. The highest-priority style layer.
+ *
+ * This is the ONLY place where data drives visuals.
+ * JS/React declares intent via data-attributes.
+ * This file maps that intent to visual treatment.
+ *
+ * Pattern: set --status-color on the container, let
+ * the .status-tinted or .status-solid utility consume it.
+ * Children inherit via currentColor.
+ *
+ * Rules:
+ *   1. Every selector here targets a [data-*] attribute.
+ *   2. Reference intent aliases only. Never raw values.
+ *   3. Set properties on the [data-*] CONTAINER.
+ *      Let children inherit via currentColor / inherit.
+ *   4. No layout properties here (display, grid, flex, gap).
+ *
+ * Intent vocabulary:
+ *
+ *   data-status   — server-driven status (active, inactive, error, pending)
+ *   data-state    — UI state (open, closed, loading, expanded)
+ *   data-variant  — visual variation (primary, secondary, ghost, danger)
+ *   data-priority — urgency level (low, medium, high, critical)
+ */
+
+
+/* ═══════════════════════════════════════════
+ * Status → --status-color contract
+ *
+ * Consumed by .status-tinted and .status-solid utilities.
+ * The utility decides HOW to render. The exception decides
+ * WHICH color based on the data-attribute value.
+ * ═══════════════════════════════════════════ */
+
+[data-status="active"],
+[data-status="success"],
+[data-status="confirmed"] {
+  --status-color: var(--color-success);
+}
+
+[data-status="error"],
+[data-status="failed"] {
+  --status-color: var(--color-danger);
+}
+
+[data-status="pending"],
+[data-status="computing"],
+[data-status="warning"],
+[data-status="processing"] {
+  --status-color: var(--color-warning);
+}
+
+[data-status="complete"] {
+  --status-color: var(--color-success);
+}
+
+[data-status="inactive"],
+[data-status="disabled"] {
+  --status-color: var(--color-text-muted);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Priority → --status-color contract
+ * ═══════════════════════════════════════════ */
+
+[data-priority="high"],
+[data-priority="critical"] {
+  --status-color: var(--color-danger);
+}
+
+[data-priority="medium"] {
+  --status-color: var(--color-warning);
+}
+
+[data-priority="low"] {
+  --status-color: var(--color-text-muted);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Button variants
+ * ═══════════════════════════════════════════ */
+
+.button[data-variant="secondary"] {
+  background-color: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.button[data-variant="secondary"]:hover {
+  background-color: var(--color-surface-sunken);
+}
+
+.button[data-variant="ghost"] {
+  background-color: transparent;
+  color: var(--color-text);
+  border-color: transparent;
+}
+
+.button[data-variant="ghost"]:hover {
+  background-color: var(--color-surface-sunken);
+}
+
+.button[data-variant="danger"] {
+  background-color: var(--color-danger);
+  color: var(--color-text-inverse);
+}
+
+.button[data-variant="danger"]:hover {
+  background-color: color-mix(in srgb, var(--color-danger) 85%, var(--color-text));
+}
+
+
+/* ═══════════════════════════════════════════
+ * UI state
+ * ═══════════════════════════════════════════ */
+
+[data-state="loading"] {
+  opacity: var(--opacity-dim);
+  pointer-events: none;
+}
+
+[data-state="expanded"] > .card {
+  border-color: var(--color-interactive);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Chevron rotation
+ * ═══════════════════════════════════════════ */
+
+.chevron[data-expanded="true"] {
+  transform: rotate(180deg);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Tab button active state
+ * ═══════════════════════════════════════════ */
+
+.tab-btn[data-active="true"] {
+  border-bottom: var(--border-width-active) solid var(--color-interactive);
+  color: var(--color-text);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Input error state
+ * ═══════════════════════════════════════════ */
+
+.input[data-error] {
+  border-color: color-mix(in srgb, var(--color-danger) 60%, transparent);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Badge selection state
+ * ═══════════════════════════════════════════ */
+
+.badge[data-state="active"] {
+  background-color: var(--color-interactive);
+  color: var(--color-text-inverse);
+  border-color: transparent;
+  --glass-specular:
+    linear-gradient(135deg, var(--glass-tint-dim) 0%, transparent 60%);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Canvas interactivity cursor
+ * ═══════════════════════════════════════════ */
+
+canvas[data-interactive] {
+  cursor: crosshair;
+}
+
+
+/* ═══════════════════════════════════════════
+ * Navigation active state
+ *
+ * React Router's NavLink sets aria-current="page"
+ * on the active link — the semantic way to indicate
+ * the current page in navigation.
+ * ═══════════════════════════════════════════ */
+
+.app-nav-link[aria-current="page"] {
+  color: var(--color-text-inverse);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ═══════════════════════════════════════════
+ * Recede dimmed state
+ * ═══════════════════════════════════════════ */
+
+.recede[data-dimmed] {
+  opacity: var(--opacity-dim);
+  filter: grayscale(1);
+  box-shadow: none;
+  transform: none;
+  pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════
+ * Card selection
+ * ═══════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════
+ * Tab group selected state
+ *
+ * aria-selected is the semantic attribute for
+ * active tabs — set by the Heatmap tab logic.
+ * ═══════════════════════════════════════════ */
+
+.tab[aria-selected="true"] {
+  color: var(--color-text);
+}
+
+.tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  bottom: calc(-1 * var(--border-width));
+  left: 0;
+  right: 0;
+  height: var(--border-width-active);
+  background: var(--color-text);
+}
+
+
+/* ═══════════════════════════════════════════
+ * Hidden state
+ * ═══════════════════════════════════════════ */
+
+[data-state="hidden"] {
+  display: none;
+}
+
+
+
+
+/* ═══════════════════════════════════════════
+ * Card selection
+ * ═══════════════════════════════════════════ */
+
+.card[data-selected] {
+  border-color: var(--color-interactive);
+  box-shadow: var(--shadow-md);
+  transform: translateY(var(--lifted));
+}
+
+.card[data-selected]:hover {
+  border-color: var(--color-interactive-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(var(--lifted));
+}

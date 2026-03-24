@@ -1,0 +1,250 @@
+/*
+ * Blocks — component-scoped styles
+ *
+ * CUBE "B" layer. Visual treatment for named components.
+ *
+ * Rules:
+ *   1. Reference intent aliases only. Never raw values.
+ *   2. No [data-*] selectors — those belong in exceptions.css.
+ */
+
+
+/* ── App Sidebar ── */
+
+.app-sidebar {
+  position: sticky;
+  top: 0;
+  height: var(--app-layout-height);
+  overflow-y: auto;
+  background-color: var(--color-surface-raised);
+  border-right: var(--border-width) solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-block);
+}
+
+.wordmark {
+  font-size: var(--text-heading);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tighter);
+  color: var(--color-text);
+  padding: var(--space-element) var(--space-inline);
+}
+
+
+/* ── App Nav Link ── */
+
+.app-nav-link {
+  position: relative;
+  z-index: var(--z-raised);
+  display: block;
+  padding: var(--space-element) var(--space-inline);
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-control);
+  text-decoration: none;
+  transition: color var(--transition-interact);
+}
+
+.app-nav-link:hover,
+.app-nav-link:focus-visible {
+  color: var(--color-text);
+  outline-offset: 0;
+}
+
+
+/* ── Page Header ── */
+
+.page-header > * + * {
+  margin-block-start: var(--space-element);
+}
+
+.page-header p {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+
+/* ── Stat Card ── */
+
+.stat-card {
+  background-color: var(--color-surface-raised);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-surface);
+  padding: var(--space-block) var(--space-inline);
+}
+
+.stat-card strong {
+  display: block;
+  font-family: var(--font-code);
+  font-size: var(--text-display);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+}
+
+.stat-card span {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+}
+
+
+/* ── Card Group (stacked rows) ── */
+
+.card-group {
+  border-radius: var(--radius-surface);
+  overflow: hidden;
+  border: var(--border-width) solid var(--color-border-frosted);
+  box-shadow: var(--shadow-surface);
+}
+
+
+/* ── Threat Row ── */
+
+.threat-row {
+  background-color: var(--color-surface-raised);
+  padding: var(--space-inline);
+  border-block-end: var(--border-width) solid var(--color-border-frosted);
+}
+
+.threat-row:last-child {
+  border-block-end: none;
+}
+
+.threat-row > * + * {
+  margin-block-start: var(--space-element);
+}
+
+.threat-row header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-element);
+}
+
+.threat-row header strong {
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+}
+
+.threat-row header em {
+  font-style: normal;
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+}
+
+.threat-row p {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-normal);
+}
+
+.threat-row footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-block);
+  font-size: var(--text-fine);
+  color: var(--color-text-muted);
+}
+
+.threat-row .notes {
+  font-size: var(--text-fine);
+  color: var(--color-text-muted);
+}
+
+
+/* ── Compact Row (laws, patches) ── */
+
+.compact-row {
+  background-color: var(--color-surface-raised);
+  padding: var(--space-block) var(--space-inline);
+  border-block-end: var(--border-width) solid var(--color-border-frosted);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-element);
+}
+
+.compact-row:last-child {
+  border-block-end: none;
+}
+
+.compact-row strong {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.compact-row em {
+  font-style: normal;
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+}
+
+.compact-row small {
+  display: block;
+  margin-block-start: var(--space-tight);
+}
+
+
+/* ── Badge ── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-tight) var(--space-element);
+  font-size: var(--text-fine);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid;
+  color: var(--status-color, var(--color-text-muted));
+  background-color: color-mix(in srgb, var(--status-color, var(--color-text-muted)) 8%, transparent);
+  border-color: color-mix(in srgb, var(--status-color, var(--color-text-muted)) 20%, transparent);
+}
+
+
+/* ── Card ── */
+
+.card {
+  background-color: var(--color-surface-raised);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-block);
+}
+
+
+/* ── Scan Time ── */
+
+.scan-time {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-element);
+}
+
+
+/* ── Section ── */
+
+.section > * + * {
+  margin-block-start: var(--space-block);
+}
+
+
+/* ── Page Footer ── */
+
+.page-footer {
+  border-block-start: var(--border-width) solid var(--color-border-frosted);
+  padding-block-start: var(--space-section);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline);
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}

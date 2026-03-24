@@ -1,0 +1,19 @@
+/*
+ * freeport CSS Architecture — CUBE methodology
+ *
+ * reset        — browser normalization
+ * tokens       — raw values, intent aliases, element styles
+ * compositions — layout geometry only (flow, stack, grid, center)
+ * blocks       — component-scoped styles (card, badge, stat-card)
+ * utilities    — single-purpose overrides (text, color, weight)
+ * exceptions   — data-attribute state variations ([data-status])
+ */
+
+@layer reset, tokens, compositions, blocks, utilities, exceptions;
+
+@import "./reset.css" layer(reset);
+@import "./tokens.css" layer(tokens);
+@import "./compositions.css" layer(compositions);
+@import "./blocks.css" layer(blocks);
+@import "./utilities.css" layer(utilities);
+@import "./exceptions.css" layer(exceptions);
