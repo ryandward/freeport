@@ -139,8 +139,8 @@
 }
 
 .threat-row p {
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-normal);
+  font-size: var(--text-body);
+  line-height: var(--leading-relaxed);
 }
 
 .threat-row footer {
