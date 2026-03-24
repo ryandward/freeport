@@ -1,0 +1,111 @@
+{
+  "updated": "2026-03-23T04:34:00Z",
+  "targets": [
+    {
+      "project": "systemd",
+      "repo": "systemd/systemd",
+      "component": "userdb",
+      "threat": "birthDate field in user records, --birth-date flag in homectl",
+      "status": "merged",
+      "pr": "https://github.com/systemd/systemd/pull/40954",
+      "pr_num": "#40954",
+      "author": "dylanmtaylor",
+      "patch": "available",
+      "notes": "Revert PR #41179 was closed, not merged. Code remains in main."
+    },
+    {
+      "project": "xdg-desktop-portal",
+      "repo": "flatpak/xdg-desktop-portal",
+      "component": "ParentalControls portal",
+      "threat": "QueryAgeBracket D-Bus method exposing user age ranges to apps",
+      "status": "draft",
+      "pr": "https://github.com/flatpak/xdg-desktop-portal/pull/1922",
+      "pr_num": "#1922",
+      "author": "davidedmundson",
+      "patch": "draft",
+      "notes": "KDE core developer. PR locked after heated debate."
+    },
+    {
+      "project": "accountsservice",
+      "repo": "accountsservice/accountsservice",
+      "component": "user accounts",
+      "threat": "BirthDate property with polkit-gated Get/Set methods",
+      "status": "open",
+      "pr": "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176",
+      "pr_num": "MR !176",
+      "author": "unknown",
+      "patch": "none",
+      "notes": "D-Bus layer for desktop birth date storage."
+    },
+    {
+      "project": "archinstall",
+      "repo": "archlinux/archinstall",
+      "component": "installer",
+      "threat": "Required birth date field during user creation",
+      "status": "open",
+      "pr": "https://github.com/archlinux/archinstall/pull/4290",
+      "pr_num": "#4290",
+      "author": "dylanmtaylor",
+      "patch": "none",
+      "notes": "Same author as systemd PR. Writes to userdb."
+    },
+    {
+      "project": "elementary OS",
+      "repo": "elementary/settings-useraccounts",
+      "component": "user settings",
+      "threat": "Age declaration UI in account creation",
+      "status": "open",
+      "pr": "https://github.com/elementary/settings-useraccounts/pull/270",
+      "pr_num": "#270",
+      "author": "danirabbit",
+      "patch": "none",
+      "notes": "Author is the elementary OS founder."
+    },
+    {
+      "project": "elementary OS",
+      "repo": "elementary/portals",
+      "component": "desktop portals",
+      "threat": "Account portal exposing user info to applications",
+      "status": "open",
+      "pr": "https://github.com/elementary/portals/pull/180",
+      "pr_num": "#180",
+      "author": "danirabbit",
+      "patch": "none",
+      "notes": "Portal-layer integration for age data."
+    },
+    {
+      "project": "pacman",
+      "repo": "pacman/pacman",
+      "component": "package manager",
+      "threat": "agerequirement field in PKGBUILDs",
+      "status": "satirical",
+      "pr": "https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353",
+      "pr_num": "MR !353",
+      "author": "allan",
+      "patch": "watching",
+      "notes": "Satirical MR from the pacman maintainer. Watching for real attempts."
+    },
+    {
+      "project": "ageverifyd",
+      "repo": "outerheaven199X/ageverifyd",
+      "component": "D-Bus daemon",
+      "threat": "Reference implementation of org.freedesktop.AgeVerification1",
+      "status": "active",
+      "pr": "https://github.com/outerheaven199X/ageverifyd",
+      "pr_num": "repo",
+      "author": "outerheaven199X",
+      "patch": "n/a",
+      "notes": "Standalone daemon. SetAge, SetDateOfBirth, GetAgeBracket methods."
+    }
+  ],
+  "laws": [
+    {"jurisdiction": "California", "bill": "AB 1043", "status": "signed", "effective": "2027-01-01", "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB1043"},
+    {"jurisdiction": "Colorado", "bill": "SB 26-051", "status": "in progress", "effective": "TBD", "url": "https://leg.colorado.gov/bills/sb26-051"},
+    {"jurisdiction": "Brazil", "bill": "Lei 15.211", "status": "enacted", "effective": "2025", "url": ""},
+    {"jurisdiction": "Illinois", "bill": "SB3977", "status": "in progress", "effective": "TBD", "url": ""}
+  ],
+  "patches": [
+    {"package": "systemd", "distro": "arch", "status": "verified", "file": "distros/arch/systemd/patches/0001-revert-birthdate-userdb.patch"},
+    {"package": "xdg-desktop-portal", "distro": "arch", "status": "draft", "file": "distros/arch/xdg-desktop-portal/patches/0001-remove-parental-controls-portal.patch"}
+  ]
+}
