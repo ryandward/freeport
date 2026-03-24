@@ -35,30 +35,43 @@
  * WHICH color based on the data-attribute value.
  * ═══════════════════════════════════════════ */
 
+/* ── Success / green ── */
 [data-status="active"],
 [data-status="success"],
-[data-status="confirmed"] {
+[data-status="confirmed"],
+[data-status="complete"],
+[data-status="verified"],
+[data-status="available"] {
   --status-color: var(--color-success);
 }
 
+/* ── Danger / red ── */
 [data-status="error"],
-[data-status="failed"] {
+[data-status="failed"],
+[data-status="merged"],
+[data-status="signed"],
+[data-status="enacted"] {
   --status-color: var(--color-danger);
 }
 
+/* ── Warning / amber ── */
 [data-status="pending"],
 [data-status="computing"],
 [data-status="warning"],
-[data-status="processing"] {
+[data-status="processing"],
+[data-status="open"],
+[data-status="draft"],
+[data-status="in progress"] {
   --status-color: var(--color-warning);
 }
 
-[data-status="complete"] {
-  --status-color: var(--color-success);
-}
-
+/* ── Muted / grey ── */
 [data-status="inactive"],
-[data-status="disabled"] {
+[data-status="disabled"],
+[data-status="satirical"],
+[data-status="watching"],
+[data-status="none"],
+[data-status="n/a"] {
   --status-color: var(--color-text-muted);
 }
 
