@@ -134,7 +134,7 @@
   border: var(--border-width) solid var(--color-border-frosted);
   border-radius: var(--radius-surface);
   box-shadow: var(--shadow-surface);
-  padding: var(--space-section) var(--space-inline);
+  padding: var(--space-inline);
 }
 
 .threat-card > * + * {

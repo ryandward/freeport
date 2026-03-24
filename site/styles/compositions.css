@@ -78,6 +78,15 @@
 }
 
 
+/* ── Stat Grid: fixed 4-column, no wrapping ── */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-element);
+}
+
+
 /* ── Bottombar: content above, bar pinned below ── */
 
 .bottombar {
