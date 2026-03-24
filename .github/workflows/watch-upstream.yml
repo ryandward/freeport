@@ -246,19 +246,18 @@ jobs:
               if t['pr_num'] == '#40954': t['status'] = 'merged'
               if t['pr_num'] == 'MR !353': t['status'] = 'satirical'
 
-          laws = [
-              {'jurisdiction':'California','bill':'AB 1043','status':'signed','effective':'2027-01-01','url':'https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB1043'},
-              {'jurisdiction':'Colorado','bill':'SB 26-051','status':'in progress','effective':'TBD','url':'https://leg.colorado.gov/bills/sb26-051'},
-              {'jurisdiction':'Brazil','bill':'Lei 15.211','status':'enacted','effective':'2025','url':''},
-              {'jurisdiction':'Illinois','bill':'SB3977','status':'in progress','effective':'TBD','url':''},
-          ]
+          # scan distros/ for real patch files
+          import os, glob
+          patches = []
+          for pf in sorted(glob.glob('distros/*/*/patches/*.patch')):
+              parts = pf.split('/')
+              distro = parts[1]
+              package = parts[2]
+              # draft if filename contains 'draft' or 'remove', verified otherwise
+              status = 'draft' if 'draft' in pf or 'remove' in pf else 'verified'
+              patches.append({'package': package, 'distro': distro, 'status': status, 'file': pf})
 
-          patches = [
-              {'package':'systemd','distro':'arch','status':'verified','file':'distros/arch/systemd/patches/0001-revert-birthdate-userdb.patch'},
-              {'package':'xdg-desktop-portal','distro':'arch','status':'draft','file':'distros/arch/xdg-desktop-portal/patches/0001-remove-parental-controls-portal.patch'},
-          ]
-
-          data = {'updated': '$now', 'targets': targets, 'laws': laws, 'patches': patches}
+          data = {'updated': '$now', 'targets': targets, 'patches': patches}
           with open('site/data.json', 'w') as f:
               json.dump(data, f, indent=2)
           print('site/data.json generated')

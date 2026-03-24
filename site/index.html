@@ -47,13 +47,38 @@
 
         <section class="section" id="laws">
           <h2>Legal pressure</h2>
-          <p class="scan-time">manually maintained</p>
-          <div class="threat-list" id="laws-list"></div>
+          <div class="threat-list">
+            <div class="info-card">
+              <header>
+                <div><strong>California</strong> <em>AB 1043</em></div>
+                <span class="badge" data-status="signed">signed</span>
+              </header>
+              <small>effective 2027-01-01</small>
+            </div>
+            <div class="info-card">
+              <header>
+                <div><strong>Colorado</strong> <em>SB 26-051</em></div>
+                <span class="badge" data-status="in progress">in progress</span>
+              </header>
+            </div>
+            <div class="info-card">
+              <header>
+                <div><strong>Brazil</strong> <em>Lei 15.211</em></div>
+                <span class="badge" data-status="enacted">enacted</span>
+              </header>
+              <small>effective 2025</small>
+            </div>
+            <div class="info-card">
+              <header>
+                <div><strong>Illinois</strong> <em>SB3977</em></div>
+                <span class="badge" data-status="in progress">in progress</span>
+              </header>
+            </div>
+          </div>
         </section>
 
         <section class="section" id="patches">
           <h2>Patches</h2>
-          <p class="scan-time">manually maintained</p>
           <div class="threat-list" id="patches-list"></div>
         </section>
 
@@ -85,7 +110,6 @@ function render(data) {
     'last scan ' + new Date(data.updated).toUTCString();
 
   document.getElementById('targets').innerHTML = data.targets.map(target).join('');
-  document.getElementById('laws-list').innerHTML = data.laws.map(law).join('');
   document.getElementById('patches-list').innerHTML = data.patches.map(patch).join('');
 }
 
@@ -109,16 +133,6 @@ function target(t) {
       '<span class="badge" data-status="' + t.patch + '">' + t.patch + '</span>' +
     '</footer>' +
     (t.notes ? '<p class="notes">' + t.notes + '</p>' : '') +
-  '</div>';
-}
-
-function law(l) {
-  return '<div class="info-card">' +
-    '<header>' +
-      '<div><strong>' + l.jurisdiction + '</strong> <em>' + l.bill + '</em></div>' +
-      '<span class="badge" data-status="' + l.status + '">' + l.status + '</span>' +
-    '</header>' +
-    (l.effective ? '<small>effective ' + l.effective + '</small>' : '') +
   '</div>';
 }
 
