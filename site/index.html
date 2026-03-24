@@ -204,11 +204,25 @@
 
   .gauge {
     font-family: var(--font-mono);
-    font-size: var(--text-title);
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: var(--weight-semibold);
     font-variant-numeric: tabular-nums;
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tighter);
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+
+  .stat-card {
+    background-color: var(--color-surface-raised);
+    border: var(--border-width) solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xs);
+    padding: var(--space-5) var(--space-5);
   }
 
   .divider {
@@ -273,8 +287,8 @@
       </p>
     </header>
 
-    <div class="stack" style="--stack-gap: var(--space-6)">
-      <div class="cluster" style="--cluster-gap: var(--space-10)" id="gauges"></div>
+    <div class="stack" style="--stack-gap: var(--space-5)">
+      <div class="stat-grid" id="gauges"></div>
       <p class="text-fine color-muted" id="scan-time"></p>
     </div>
 
@@ -329,9 +343,11 @@ function render(data) {
 }
 
 function gauge(n, label, cls) {
-  return `<div class="stack" style="--stack-gap:var(--space-1)">
-    <span class="gauge ${cls}">${n}</span>
-    <span class="text-nano weight-semibold color-muted" style="text-transform:uppercase;letter-spacing:var(--tracking-wider)">${label}</span>
+  return `<div class="stat-card">
+    <div class="stack" style="--stack-gap:var(--space-2)">
+      <span class="gauge ${cls}">${n}</span>
+      <span class="text-body-sm weight-medium color-muted">${label}</span>
+    </div>
   </div>`;
 }
 
