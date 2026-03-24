@@ -135,19 +135,24 @@ jobs:
             "19612"   # pacman/alpm.rs
             "85320"   # pacman/libmakepkg-dropins
           )
-          gitlab_terms=("age" "birth" "verification" "parental")
+          gitlab_terms=("birth" "age+verification" "parental" "agerequirement")
 
           for pid in "${gitlab_projects[@]}"; do
             for term in "${gitlab_terms[@]}"; do
-              curl -s "https://gitlab.archlinux.org/api/v4/projects/${pid}/merge_requests?search=${term}&state=all&per_page=10" | \
-                jq -r '.[]? | "\(.iid)|\(.title)|\(.state)|\(.web_url)"' 2>/dev/null > /tmp/gitlab_results.txt || true
+              curl -s "https://gitlab.archlinux.org/api/v4/projects/${pid}/merge_requests?search=${term/+/ }&state=all&per_page=10" | \
+                jq -r '.[]? | "\(.iid)|\(.title)|\(.state)|\(.web_url)|\(.author.username)"' 2>/dev/null > /tmp/gitlab_results.txt || true
 
-              while IFS='|' read -r iid title state url; do
+              while IFS='|' read -r iid title state url author; do
                 [ -z "$iid" ] && continue
+                # filter by title relevance
+                lower_title=$(echo "$title" | tr '[:upper:]' '[:lower:]')
+                if ! echo "$lower_title" | grep -qE "birth|age.verif|age.assur|age.require|parental"; then
+                  continue
+                fi
                 key="gitlab:${pid}!${iid}"
                 if ! grep -qF "$key" .tracking/seen.txt; then
-                  echo "FOUND: gitlab ${key} [${state}] ${title}"
-                  printf "GITLAB %s [%s] %s\n  %s\n\n" "${key}" "${state}" "${title}" "${url}" >> /tmp/findings.txt
+                  echo "FOUND: gitlab ${key} [${state}] ${title} by ${author}"
+                  printf "GITLAB %s [%s] %s (by %s)\n  %s\n\n" "${key}" "${state}" "${title}" "${author}" "${url}" >> /tmp/findings.txt
                   echo "$key" >> .tracking/seen.txt
                 fi
               done < /tmp/gitlab_results.txt
