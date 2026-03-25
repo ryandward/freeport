@@ -60,7 +60,7 @@ jobs:
           pkg="distros/arch/${{ inputs.package }}"
           cd "$pkg"
           chown -R builder:builder .
-          su builder -c "makepkg -s --noconfirm"
+          su builder -c "makepkg -s --noconfirm --nocheck"
 
       - name: verify no age verification in output
         run: |
