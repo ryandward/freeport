@@ -1,7 +1,8 @@
 name: auto rebuild
 
 # Runs daily. Checks if Arch shipped a new version of any tracked package.
-# If yes: pulls the new PKGBUILD, applies our patches, builds, and publishes.
+# If yes: pulls the new PKGBUILD, applies our patches, builds, signs, and
+# publishes to the freeport pacman repo (GitHub Release).
 # If patches fail to apply, opens an issue instead of silently breaking.
 
 on:
@@ -36,7 +37,7 @@ jobs:
           useradd -m builder
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-      - name: import signing keys
+      - name: import upstream signing keys
         run: |
           for pkg_dir in distros/arch/*/; do
             if [ -d "${pkg_dir}keys/pgp" ]; then
@@ -45,6 +46,15 @@ jobs:
               done
             fi
           done
+
+      - name: import freeport signing key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          echo "$GPG_PRIVATE_KEY" | su builder -c "gpg --batch --import"
+          KEY_ID=$(echo "$GPG_PRIVATE_KEY" | su builder -c "gpg --batch --import --import-options show-only" 2>&1 | grep -oP '[A-F0-9]{40}' | head -1)
+          echo "FREEPORT_KEY_ID=$KEY_ID" >> "$GITHUB_ENV"
 
       - name: check for upstream version bumps and rebuild
         env:
@@ -131,7 +141,63 @@ jobs:
             echo "has_failures=1" >> "$GITHUB_ENV"
           fi
 
-      - name: upload built packages
+          # flag that we have packages to publish
+          if [ -n "$needs_rebuild" ]; then
+            echo "has_packages=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: sign packages and publish repo
+        if: env.has_packages == '1'
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p /tmp/repo
+
+          # collect all built packages
+          for pkg in $TRACKED_PACKAGES; do
+            cp distros/arch/${pkg}/*.pkg.tar.* /tmp/repo/ 2>/dev/null || true
+          done
+
+          # remove any .sig files from the build, we sign fresh
+          rm -f /tmp/repo/*.sig
+
+          # sign each package
+          for f in /tmp/repo/*.pkg.tar.*; do
+            [ -f "$f" ] || continue
+            su builder -c "gpg --batch --yes --passphrase '$GPG_PASSPHRASE' --pinentry-mode loopback --detach-sign '$f'"
+          done
+
+          # download existing repo packages so we don't lose them
+          gh release download repo --dir /tmp/existing --pattern '*.pkg.tar.*' 2>/dev/null || true
+          if [ -d /tmp/existing ]; then
+            for f in /tmp/existing/*; do
+              base=$(basename "$f")
+              if [ ! -f "/tmp/repo/$base" ]; then
+                cp "$f" /tmp/repo/
+              fi
+            done
+          fi
+
+          # create repo database
+          cd /tmp/repo
+          su builder -c "repo-add --sign --key '$FREEPORT_KEY_ID' freeport.db.tar.gz *.pkg.tar.!(sig)"
+
+          # create or update the release
+          if gh release view repo --repo ryandward/freeport >/dev/null 2>&1; then
+            gh release delete-asset repo --yes --pattern '*' --repo ryandward/freeport 2>/dev/null || true
+            gh release upload repo /tmp/repo/* --repo ryandward/freeport --clobber
+          else
+            gh release create repo /tmp/repo/* \
+              --repo ryandward/freeport \
+              --title "freeport pacman repository" \
+              --notes "Add to pacman.conf to receive patched packages. See README for setup instructions." \
+              --latest=false
+          fi
+
+          echo "published to freeport repo release"
+
+      - name: upload built packages as artifact
         uses: actions/upload-artifact@v4
         with:
           name: freeport-packages

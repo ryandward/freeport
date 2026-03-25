@@ -112,17 +112,42 @@ package manager internals, open an issue.
 
 ### Arch Linux
 
-Build the patched packages yourself:
+Add the freeport repo to pacman. Patched packages are signed and
+published automatically whenever upstream ships a new version.
 
+```bash
+# import the freeport signing key
+sudo pacman-key --recv-keys B06E95AC8D45885FE6451B669D64B2DDC464B011 --keyserver keyserver.ubuntu.com
+sudo pacman-key --lsign-key B06E95AC8D45885FE6451B669D64B2DDC464B011
 ```
+
+Add this to `/etc/pacman.conf` **above** `[core]` so freeport packages
+take priority over the official ones:
+
+```ini
+[freeport]
+Server = https://github.com/ryandward/freeport/releases/download/repo
+```
+
+Then update:
+
+```bash
+sudo pacman -Syu
+```
+
+That's it. Patched packages replace the official ones. When Arch ships
+a new version, freeport rebuilds with the patch applied and publishes
+the update. You get it through normal `pacman -Syu`.
+
+### Build from source
+
+If you prefer to build yourself:
+
+```bash
 git clone https://github.com/ryandward/freeport.git
 cd freeport/distros/arch/systemd
 makepkg -si
 ```
-
-This builds systemd from the official Arch sources with the freeport
-patch applied. The resulting package is a drop-in replacement for the
-official one.
 
 ### Other distros
 
