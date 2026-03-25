@@ -281,6 +281,8 @@ jobs:
           python3 -c "
           import json, subprocess, sys
 
+          import urllib.request
+
           def gh_pr(repo, num):
               try:
                   r = subprocess.run(
@@ -288,6 +290,19 @@ jobs:
                       capture_output=True, text=True, timeout=10)
                   if r.returncode == 0:
                       return json.loads(r.stdout)
+              except: pass
+              return None
+
+          def codeberg_pr(repo, num):
+              try:
+                  url = 'https://codeberg.org/api/v1/repos/{}/pulls/{}'.format(repo, num)
+                  req = urllib.request.Request(url)
+                  with urllib.request.urlopen(req, timeout=10) as resp:
+                      data = json.loads(resp.read())
+                      state = data.get('state', 'unknown')
+                      if state == 'closed' and data.get('merged', False):
+                          state = 'merged'
+                      return {'state': state}
               except: pass
               return None
 
@@ -304,11 +319,18 @@ jobs:
               {'project':'Calamares','repo':'Calamares/calamares','component':'installer','threat':'Birth date field in user creation, writes to AccountsService and systemd userdb','pr_num':'#2499','pr':'https://codeberg.org/Calamares/calamares/pulls/2499','author':'dylanmtaylor','patch':'none','notes':'European project (Netherlands). Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda, KDE neon. US law pushed into EU infrastructure. Thread locked after heated pushback.'},
           ]
 
-          # try to get live status from github
+          # try to get live status from github, codeberg, or gitlab
           for t in targets:
               repo = t['repo']
               num = t['pr_num'].lstrip('#')
-              if num.isdigit():
+              pr_url = t.get('pr', '')
+              if 'codeberg.org' in pr_url and num.isdigit():
+                  info = codeberg_pr(repo, num)
+                  if info:
+                      t['status'] = info['state'].lower()
+                  else:
+                      t['status'] = 'unknown'
+              elif num.isdigit():
                   info = gh_pr(repo, num)
                   if info:
                       t['status'] = info['state'].lower()
