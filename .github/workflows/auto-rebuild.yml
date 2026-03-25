@@ -162,6 +162,9 @@ jobs:
           # remove any .sig files from the build, we sign fresh
           rm -f /tmp/repo/*.sig
 
+          # builder needs to own the directory to write signatures
+          chown -R builder:builder /tmp/repo
+
           # sign each package
           for f in /tmp/repo/*.pkg.tar.*; do
             [ -f "$f" ] || continue
