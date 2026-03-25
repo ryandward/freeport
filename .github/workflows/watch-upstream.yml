@@ -185,6 +185,53 @@ jobs:
             done
           done
 
+          # scan Codeberg (Gitea API)
+          echo "scanning Codeberg..."
+          codeberg_repos=(
+            "Calamares/calamares"
+          )
+
+          for repo in "${codeberg_repos[@]}"; do
+            curl -s "https://codeberg.org/api/v1/repos/${repo}/pulls?state=all&limit=20" | \
+              jq -r '.[]? | "\(.number)|\(.title)|\(.state)|\(.html_url)|\(.user.login)"' 2>/dev/null > /tmp/codeberg_results.txt || true
+
+            while IFS='|' read -r num title state url author; do
+              [ -z "$num" ] && continue
+              lower_title=$(echo "$title" | tr '[:upper:]' '[:lower:]')
+              if ! echo "$lower_title" | grep -qE "birth|age.verif|age.assur|age.bracket|parental.control"; then
+                continue
+              fi
+              key="codeberg:${repo}#${num}"
+              if ! grep -qF "$key" .tracking/seen.txt; then
+                echo "FOUND: codeberg ${key} [${state}] ${title} by ${author}"
+                printf "CODEBERG %s [%s] %s (by %s)\n  %s\n\n" "${key}" "${state}" "${title}" "${author}" "${url}" >> /tmp/findings.txt
+                echo "$key" >> .tracking/seen.txt
+              fi
+            done < /tmp/codeberg_results.txt
+          done
+
+          # watch dylanmtaylor on Codeberg
+          echo "watching dylanmtaylor on Codeberg..."
+          curl -s "https://codeberg.org/api/v1/repos/search?q=&sort=updated&limit=50" \
+            --data-urlencode "q=author:dylanmtaylor" 2>/dev/null || true
+          # Gitea doesn't have a cross-repo PR search, so scan known repos above
+          # and also search for repos dylanmtaylor has forked or contributed to
+          curl -s "https://codeberg.org/api/v1/users/dylanmtaylor/repos?limit=50" | \
+            jq -r '.[]? | "\(.full_name)|\(.html_url)|\(.description)"' 2>/dev/null > /tmp/dt_codeberg.txt || true
+
+          while IFS='|' read -r name url desc; do
+            [ -z "$name" ] && continue
+            lower_desc=$(echo "$desc $name" | tr '[:upper:]' '[:lower:]')
+            if echo "$lower_desc" | grep -qE "birth|age.verif|age.assur|parental"; then
+              key="codeberg:${name}"
+              if ! grep -qF "$key" .tracking/seen.txt; then
+                echo "FOUND: dylanmtaylor codeberg repo ${name}"
+                printf "CODEBERG:REPO %s\n  %s\n  %s\n\n" "${name}" "${url}" "${desc}" >> /tmp/findings.txt
+                echo "$key" >> .tracking/seen.txt
+              fi
+            fi
+          done < /tmp/dt_codeberg.txt
+
           # report
           if [ -s /tmp/findings.txt ]; then
             echo "=== FINDINGS ==="
@@ -254,6 +301,7 @@ jobs:
               {'project':'elementary OS','repo':'elementary/portals','component':'desktop portals','threat':'Account portal exposing user info to applications','pr_num':'#180','pr':'https://github.com/elementary/portals/pull/180','author':'danirabbit','patch':'none','notes':'Portal-layer integration for age data.'},
               {'project':'pacman','repo':'pacman/pacman','component':'package manager','threat':'agerequirement field in PKGBUILDs','pr_num':'MR !353','pr':'https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353','author':'allan','patch':'watching','notes':'Satirical MR from the pacman maintainer. Watching for real attempts.'},
               {'project':'ageverifyd','repo':'outerheaven199X/ageverifyd','component':'D-Bus daemon','threat':'Reference implementation of org.freedesktop.AgeVerification1','pr_num':'repo','pr':'https://github.com/outerheaven199X/ageverifyd','author':'outerheaven199X','patch':'n/a','notes':'Standalone daemon. SetAge, SetDateOfBirth, GetAgeBracket methods.'},
+              {'project':'Calamares','repo':'Calamares/calamares','component':'installer','threat':'Birth date field in user creation, writes to AccountsService and systemd userdb','pr_num':'#2499','pr':'https://codeberg.org/Calamares/calamares/pulls/2499','author':'dylanmtaylor','patch':'none','notes':'European project (Netherlands). Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda, KDE neon. US law pushed into EU infrastructure. Thread locked after heated pushback.'},
           ]
 
           # try to get live status from github
