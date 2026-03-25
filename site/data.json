@@ -86,6 +86,18 @@
       "status": "unknown"
     },
     {
+      "project": "Calamares",
+      "repo": "Calamares/calamares",
+      "component": "installer",
+      "threat": "Birth date field in user creation, writes to AccountsService and systemd userdb",
+      "pr_num": "#2499",
+      "pr": "https://codeberg.org/Calamares/calamares/pulls/2499",
+      "author": "dylanmtaylor",
+      "patch": "none",
+      "notes": "Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda, KDE neon. Paused pending xdg-desktop-portal standardization.",
+      "status": "draft"
+    },
+    {
       "project": "pacman",
       "repo": "pacman/pacman",
       "component": "package manager",
