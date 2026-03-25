@@ -14,6 +14,10 @@ permissions:
   contents: write
   issues: write
 
+concurrency:
+  group: freeport-repo-publish
+  cancel-in-progress: false
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   TRACKED_PACKAGES: systemd xdg-desktop-portal accountsservice
@@ -29,7 +33,7 @@ jobs:
       - name: install tools
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm --needed base-devel devtools git jq
+          pacman -S --noconfirm --needed base-devel devtools git jq github-cli
           pacman -S --noconfirm --needed asp || pip install asp-archlinux || echo "asp not available, using git clone fallback"
 
       - name: create build user
@@ -50,11 +54,8 @@ jobs:
       - name: import freeport signing key
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           echo "$GPG_PRIVATE_KEY" | su builder -c "gpg --batch --import"
-          KEY_ID=$(echo "$GPG_PRIVATE_KEY" | su builder -c "gpg --batch --import --import-options show-only" 2>&1 | grep -oP '[A-F0-9]{40}' | head -1)
-          echo "FREEPORT_KEY_ID=$KEY_ID" >> "$GITHUB_ENV"
 
       - name: check for upstream version bumps and rebuild
         env:
@@ -141,71 +142,75 @@ jobs:
             echo "has_failures=1" >> "$GITHUB_ENV"
           fi
 
-          # flag that we have packages to publish
           if [ -n "$needs_rebuild" ]; then
             echo "has_packages=1" >> "$GITHUB_ENV"
           fi
 
       - name: sign packages and publish repo
         if: env.has_packages == '1'
+        shell: bash
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p /tmp/repo
 
-          # collect all built packages
+          # collect packages from all tracked dirs
           for pkg in $TRACKED_PACKAGES; do
-            cp distros/arch/${pkg}/*.pkg.tar.* /tmp/repo/ 2>/dev/null || true
+            for f in distros/arch/${pkg}/*.pkg.tar.*; do
+              case "$f" in *.sig) continue ;; esac
+              [ -f "$f" ] && cp "$f" /tmp/repo/
+            done
           done
 
-          # remove any .sig files from the build, we sign fresh
-          rm -f /tmp/repo/*.sig
-
-          # builder needs to own the directory to write signatures
           chown -R builder:builder /tmp/repo
+          cd /tmp/repo
 
           # sign each package
-          for f in /tmp/repo/*.pkg.tar.*; do
+          for f in *.pkg.tar.*; do
             [ -f "$f" ] || continue
-            su builder -c "gpg --batch --yes --passphrase '$GPG_PASSPHRASE' --pinentry-mode loopback --detach-sign '$f'"
+            echo "$GPG_PASSPHRASE" | su builder -c \
+              "gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --detach-sign '$f'"
           done
 
-          # download existing repo packages so we don't lose them
-          gh release download repo --dir /tmp/existing --pattern '*.pkg.tar.*' 2>/dev/null || true
-          if [ -d /tmp/existing ]; then
-            for f in /tmp/existing/*; do
-              base=$(basename "$f")
-              if [ ! -f "/tmp/repo/$base" ]; then
-                cp "$f" /tmp/repo/
-              fi
-            done
-          fi
+          # fetch existing database so repo-add appends
+          gh release download repo -p "freeport.db.tar.gz" -p "freeport.files.tar.gz" \
+            --repo ryandward/freeport --dir . 2>/dev/null || true
 
-          # create repo database
-          cd /tmp/repo
-          su builder -c "repo-add --sign --key '$FREEPORT_KEY_ID' freeport.db.tar.gz *.pkg.tar.!(sig)"
+          # move .sig files aside so repo-add doesn't choke
+          mkdir -p /tmp/sigs
+          mv *.sig /tmp/sigs/ 2>/dev/null || true
 
-          # create or update the release
-          if gh release view repo --repo ryandward/freeport >/dev/null 2>&1; then
-            gh release delete-asset repo --yes --pattern '*' --repo ryandward/freeport 2>/dev/null || true
-            gh release upload repo /tmp/repo/* --repo ryandward/freeport --clobber
-          else
-            gh release create repo /tmp/repo/* \
-              --repo ryandward/freeport \
-              --title "freeport pacman repository" \
-              --notes "Add to pacman.conf to receive patched packages. See README for setup instructions." \
-              --latest=false
-          fi
+          # build repo database
+          su builder -c "repo-add freeport.db.tar.gz *.pkg.tar.*"
 
-          echo "published to freeport repo release"
+          # restore .sig files
+          mv /tmp/sigs/*.sig . 2>/dev/null || true
 
-      - name: upload built packages as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: freeport-packages
-          path: distros/arch/*/*.pkg.tar.*
-          if-no-files-found: ignore
+          # sign the database files
+          for db in freeport.db.tar.gz freeport.files.tar.gz; do
+            [ -f "$db" ] || continue
+            echo "$GPG_PASSPHRASE" | su builder -c \
+              "gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --detach-sign '$db'"
+          done
+
+          # dereference symlinks (GitHub Releases can't host them)
+          for link in freeport.db freeport.files; do
+            if [ -L "$link" ]; then
+              target=$(readlink "$link")
+              rm "$link"
+              cp "$target" "$link"
+            fi
+            if [ -f "${link}.tar.gz.sig" ] && [ ! -f "${link}.sig" ]; then
+              cp "${link}.tar.gz.sig" "${link}.sig"
+            fi
+          done
+
+          # upload everything to the release
+          for f in *; do
+            [ -f "$f" ] || continue
+            gh release upload repo "$f" --repo ryandward/freeport --clobber
+          done
 
       - name: open issue on patch failure
         if: env.has_failures == '1'
