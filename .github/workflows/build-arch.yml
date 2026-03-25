@@ -33,19 +33,19 @@ jobs:
         run: |
           pacman -Syu --noconfirm base-devel devtools git
 
+      - name: create build user
+        run: |
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
       - name: import signing keys
         run: |
           pkg="distros/arch/${{ inputs.package }}"
           if [ -d "${pkg}/keys/pgp" ]; then
             for key in ${pkg}/keys/pgp/*.asc; do
-              gpg --import "$key" 2>&1 || true
+              su builder -c "gpg --import '$key'" 2>&1 || true
             done
           fi
-
-      - name: create build user
-        run: |
-          useradd -m builder
-          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
       - name: install package specific build deps
         run: |
