@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'site/**'
+    tags-ignore:
+      - '**'
   workflow_dispatch:
 
 permissions:
