@@ -75,9 +75,16 @@ infrastructure:
 
 ## What freeport does
 
-freeport is an overlay package repository. It takes the same packages
-your distribution already ships, removes every piece of age verification
-code, and gives you clean builds. Nothing else changes.
+freeport is not a fork. Forking systemd or any other core project is
+not sustainable. Nobody is going to maintain a parallel copy of millions
+of lines of code just to remove a handful of fields. Forks fall behind
+upstream within days and die.
+
+freeport patches individual packages. Your distro stays your distro.
+Your package manager stays your package manager. You swap one package
+with a clean rebuild and everything else is untouched. The patch is
+the minimum diff needed to remove the age verification code. That is
+all that changes.
 
 1. **Watches** upstream projects for new age verification code every 4
    hours, automated, across GitHub and Arch GitLab. Findings are posted
