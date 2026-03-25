@@ -54,7 +54,7 @@ infrastructure:
 
 | Project | What was added | Current state |
 |---------|---------------|---------------|
-| **Calamares** | Birth date field in user creation, writes to AccountsService and systemd userdb | [PR #2499](https://codeberg.org/Calamares/calamares/pulls/2499) draft, paused pending xdg-desktop-portal standardization. Same author as systemd PR. Used by Manjaro, EndeavourOS, Garuda, KDE neon. |
+| **Calamares** | Birth date field in user creation, writes to AccountsService and systemd userdb | [PR #2499](https://codeberg.org/Calamares/calamares/pulls/2499) draft. European project (Netherlands) receiving US law compliance PRs from the same author as systemd PR. Used by Manjaro, EndeavourOS, Garuda, KDE neon. Thread locked after pushback. |
 | **archinstall** | Required birth date field during user creation (same author as systemd PR) | [PR #4290](https://github.com/archlinux/archinstall/pull/4290) open |
 | **elementary OS settings** | Age declaration UI in user account creation | [Issue #260](https://github.com/elementary/settings-useraccounts/issues/260), [PR #270](https://github.com/elementary/settings-useraccounts/pull/270) open. Author is the elementary OS founder. |
 | **elementary OS portals** | Account portal exposing user information to applications | [Issue #173](https://github.com/elementary/portals/issues/173), [PR #180](https://github.com/elementary/portals/pull/180) open |
