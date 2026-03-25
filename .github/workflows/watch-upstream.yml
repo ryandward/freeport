@@ -116,7 +116,11 @@ jobs:
               [ -z "$id" ] && continue
               # title must actually be about age verification, not random matches
               lower_title=$(echo "$title" | tr '[:upper:]' '[:lower:]')
-              if ! echo "$lower_title" | grep -qE "birth|age.verif|age.assur|age.bracket|age.gate|ab-1043|parental.control|age.require"; then
+              if ! echo "$lower_title" | grep -qE "birth.?date.*verif|birth.?date.*user|age.verif|age.assur|age.bracket|age.gate|ab-1043|parental.control.*age|age.require.*package"; then
+                continue
+              fi
+              # skip medical/health repos
+              if echo "$id" | grep -qiE "health|medical|fhir|hl7|patient|clinical"; then
                 continue
               fi
               if ! grep -qF "$id" .tracking/seen.txt; then
