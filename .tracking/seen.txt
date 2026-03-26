@@ -45,3 +45,15 @@ fd:accountsservice%2Faccountsservice!176
 fd:xdg%2Fxdg-specs!113
 UP-Manila-SILab/ph-core#206
 codeberg:Calamares/calamares#2499
+AntiSurv/oss-anti-surveillance#27
+AntiSurv/oss-anti-surveillance#25
+AntiSurv/oss-anti-surveillance#7
+BryanLunduke/DoesItAgeVerify#35
+BryanLunduke/DoesItAgeVerify#36
+BryanLunduke/DoesItAgeVerify#31
+BryanLunduke/DoesItAgeVerify#15
+BryanLunduke/DoesItAgeVerify#18
+BryanLunduke/DoesItAgeVerify#14
+BryanLunduke/DoesItAgeVerify#12
+BryanLunduke/DoesItAgeVerify#6
+BryanLunduke/DoesItAgeVerify#11
