@@ -39,8 +39,6 @@ jobs:
             "elementary/settings-useraccounts"
             "elementary/portals"
             "outerheaven199X/ageverifyd"
-            "AntiSurv/oss-anti-surveillance"
-            "BryanLunduke/DoesItAgeVerify"
           )
 
           terms=(

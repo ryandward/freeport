@@ -210,6 +210,14 @@ If that data exists on your machine, it is one subpoena, one breach, or
 one policy change away from being used against you. freeport exists to
 make sure that data never exists in the first place.
 
+## Distros that have refused
+
+- [Garuda Linux](https://linuxiac.com/garuda-linux-says-no-to-age-verification-outside-legal-requirement/) --
+  publicly stated they will not implement age verification outside legal
+  requirement
+- Artix, Alpine, antiX -- systemd-free, not affected by the userdb change
+- Void Linux, Devuan, OpenBSD -- have stated opposition
+
 ## Related projects
 
 - [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance) --
@@ -217,7 +225,7 @@ make sure that data never exists in the first place.
   across the Linux stack. Good intelligence source, no patches.
 - [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify) --
   tracks which operating systems have implemented age verification.
-  704 stars. Documentation only.
+  Documentation only.
 - [Ageless Linux](https://agelesslinux.org/) -- Debian based distro in
   deliberate noncompliance with AB 1043. Political statement, not a
   patch project.
