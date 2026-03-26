@@ -1,0 +1,13 @@
+pkgname=freeport-hook
+pkgver=1
+pkgrel=1
+pkgdesc='Pacman hook that blocks packages containing age verification infrastructure'
+arch=('any')
+url='https://github.com/ryandward/freeport'
+license=('MIT')
+depends=('bash' 'binutils')
+
+package() {
+  install -Dm755 "$srcdir/../freeport-check" "$pkgdir/usr/share/libalpm/scripts/freeport-check"
+  install -Dm644 "$srcdir/../freeport-check.hook" "$pkgdir/usr/share/libalpm/hooks/freeport-check.hook"
+}

@@ -129,15 +129,20 @@ take priority over the official ones:
 Server = https://github.com/ryandward/freeport/releases/download/repo
 ```
 
-Then update:
+Then update and install the protection hook:
 
 ```bash
-sudo pacman -Syu
+sudo pacman -Syu freeport-hook
 ```
 
-That's it. Patched packages replace the official ones. When Arch ships
-a new version, freeport rebuilds with the patch applied and publishes
-the update. You get it through normal `pacman -Syu`.
+The `freeport-hook` package installs a pacman hook that scans every
+package before it gets installed. If a package contains age
+verification code, the transaction is blocked and you get told about
+it. This protects you even for packages freeport doesn't rebuild yet.
+
+Patched packages replace the official ones automatically. When Arch
+ships a new version, freeport rebuilds with the patch applied and
+publishes the update. You get it through normal `pacman -Syu`.
 
 ### Build from source
 
