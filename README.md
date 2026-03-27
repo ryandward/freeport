@@ -31,15 +31,23 @@ is only as strong as the people who show up.
 
 ## What is happening
 
-"Age verification" is not about age. It is a delivery mechanism for
-identity infrastructure. Once your operating system stores your birth
-date, that data can be collected, subpoenaed, sold, breached, and used
-to build a profile of who you are and what you should be allowed to do.
-Today they ask for your birthday. Tomorrow they know who you are.
+Identity collection infrastructure is being added to core Linux
+packages. `systemd` now has a `birthDate` field in its user records.
+Installers are being patched to collect date of birth during setup.
+D-Bus interfaces are being proposed to expose this data to
+applications.
 
-California's AB 1043 (effective January 2027) requires operating systems
-to provide real time age bracket APIs. Colorado and Brazil have similar
-laws. In response, core open source projects have started adding this
+This is not about parental controls. It is identity infrastructure
+at the system level. Your server does not have a birthday. Your
+build farm does not have a birthday. But if these fields ship in the
+packages you install, the data pipeline exists whether you use it or
+not. Once the field is there, it can be collected, subpoenaed, sold,
+or breached.
+
+The legal pressure is coming from California's AB 1043 (effective
+January 2027), Colorado's SB 26-051, and Brazil's Lei 15.211. These
+laws require operating systems to provide real time age bracket APIs.
+In response, core open source projects have started adding this
 infrastructure:
 
 ### Core infrastructure
@@ -83,18 +91,18 @@ upstream within days and die.
 freeport patches individual packages. Your distro stays your distro.
 Your package manager stays your package manager. You swap one package
 with a clean rebuild and everything else is untouched. The patch is
-the minimum diff needed to remove the age verification code. That is
-all that changes.
+the minimum diff needed to remove the identity collection code. That
+is all that changes.
 
-1. **Watches** upstream projects for new age verification code every 4
-   hours, automated, across GitHub and Arch GitLab. Findings are posted
-   to [issue #1](https://github.com/ryandward/freeport/issues/1)
+1. **Watches** upstream projects for new identity collection code every
+   4 hours, automated, across GitHub and Arch GitLab. Findings are
+   posted to [issue #1](https://github.com/ryandward/freeport/issues/1)
    automatically by CI. Watch that issue to stay informed.
-2. **Patches** affected packages to remove the age verification code
+2. **Patches** affected packages to remove identity collection fields
    without touching anything else
-3. **Builds** clean packages identical to your distro's minus the
-   surveillance infrastructure
-4. **Verifies** that built packages contain zero age verification
+3. **Builds** clean packages identical to your distro's without the
+   added identity infrastructure
+4. **Verifies** that built packages contain zero identity collection
    strings before publishing
 
 ## Preserving your toolchain
@@ -136,8 +144,8 @@ sudo pacman -Syu freeport-hook
 ```
 
 The `freeport-hook` package installs a pacman hook that scans every
-package before it gets installed. If a package contains age
-verification code, the transaction is blocked and you get told about
+package before it gets installed. If a package contains identity
+collection code, the transaction is blocked and you get told about
 it. This protects you even for packages freeport doesn't rebuild yet.
 
 Patched packages replace the official ones automatically. When Arch
@@ -178,7 +186,8 @@ is distro-specific.
 
 ## What the patches do (and do not do)
 
-Each patch is the minimum diff to remove age verification. Nothing more.
+Each patch is the minimum diff to remove identity collection fields.
+Nothing more.
 
 The systemd patch removes:
 
@@ -201,40 +210,41 @@ fields, or any other systemd functionality.
 
 ## Why
 
-Every surveillance system in history started with something reasonable.
-Age verification is the reasonable thing this time. But the
-infrastructure it requires is not a parental control. It is a data
-collection pipeline bolted onto the lowest layer of your computer.
+These fields have no business in system-level packages. A headless
+server, a container, a build machine, an embedded device. None of
+these have a user who needs a birthday recorded. But the packages
+ship the same code to every machine. If the field exists in the
+binary, the collection capability is there whether you asked for it
+or not.
 
-The upstream projects know this. systemd merged a birthDate field and the
-community forced a revert PR within days. But the revert was closed, not
-merged. The field is still in the codebase. The legal pressure is not
-going away, and the next attempt will be quieter.
+The legal pressure is not going away. systemd merged the birthDate
+field and the community forced a revert PR within days. But the
+revert was closed, not merged. The field is still in the codebase.
+The next attempt will be quieter.
 
-If that data exists on your machine, it is one subpoena, one breach, or
-one policy change away from being used against you. freeport exists to
-make sure that data never exists in the first place.
+freeport exists to make sure that data never exists on your machine
+in the first place.
 
 ## Distros that have refused
 
-- [Garuda Linux](https://linuxiac.com/garuda-linux-says-no-to-age-verification-outside-legal-requirement/) --
+- [Garuda Linux](https://linuxiac.com/garuda-linux-says-no-to-age-verification-outside-legal-requirement/)
   publicly stated they will not implement age verification outside legal
   requirement
-- Artix, Alpine, antiX -- systemd-free, not affected by the userdb change
-- Void Linux, Devuan, OpenBSD -- have stated opposition
+- Artix, Alpine, antiX are systemd-free, not affected by the userdb change
+- Void Linux, Devuan, OpenBSD have stated opposition
 
 ## Related projects
 
-- [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance) --
-  documentation project tracking every age verification implementation
+- [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance)
+  documentation project tracking every identity collection implementation
   across the Linux stack. Good intelligence source, no patches.
-- [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify) --
-  tracks which operating systems have implemented age verification.
+- [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify)
+  tracks which operating systems have implemented identity collection.
   Documentation only.
-- [Ageless Linux](https://agelesslinux.org/) -- Debian based distro in
+- [Ageless Linux](https://agelesslinux.org/) is a Debian based distro in
   deliberate noncompliance with AB 1043. Political statement, not a
   patch project.
-- [outerheaven199X/ageverifyd](https://github.com/outerheaven199X/ageverifyd) --
+- [outerheaven199X/ageverifyd](https://github.com/outerheaven199X/ageverifyd)
   reference implementation of the `org.freedesktop.AgeVerification1`
   D-Bus daemon. Know what you are fighting.
 
