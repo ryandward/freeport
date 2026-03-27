@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-27T08:12:24Z",
+  "updated": "2026-03-27T12:48:07Z",
   "targets": [
     {
       "project": "systemd",
@@ -119,7 +119,7 @@
       "author": "dylanmtaylor",
       "patch": "none",
       "notes": "European project (Netherlands). Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda, KDE neon. US law pushed into EU infrastructure. Thread locked after heated pushback.",
-      "status": "open"
+      "status": "unknown"
     }
   ],
   "patches": [
