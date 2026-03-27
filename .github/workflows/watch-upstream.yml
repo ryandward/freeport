@@ -117,8 +117,12 @@ jobs:
               if ! echo "$lower_title" | grep -qE "birth.?date.*verif|birth.?date.*user|age.verif|age.assur|age.bracket|age.gate|ab-1043|parental.control.*age|age.require.*package"; then
                 continue
               fi
-              # skip medical/health repos
-              if echo "$id" | grep -qiE "health|medical|fhir|hl7|patient|clinical"; then
+              # skip repos that aren't about OS/desktop infrastructure
+              if echo "$id" | grep -qiE "health|medical|fhir|hl7|patient|clinical|weather|UKWX|golangci|lint|deps|plur|verse-pbc"; then
+                continue
+              fi
+              # skip dependency update PRs
+              if echo "$lower_title" | grep -qE "^chore|^bump|^update module|^update dependency|lightning|onboarding"; then
                 continue
               fi
               if ! grep -qF "$id" .tracking/seen.txt; then
