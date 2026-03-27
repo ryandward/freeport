@@ -8,10 +8,11 @@
 
 Linux is not a person. It does not have a birthday.
 
-Linux runs server farms, HPC clusters, containers, CI pipelines,
-embedded controllers, and network appliances. Somebody decided that
-all of these machines need a `birthDate` field in their system
-packages. We remove it.
+Asking your operating system to store a birth date is like asking a
+bridge to carry a passport. Linux runs server farms, HPC clusters,
+containers, CI pipelines, embedded controllers, and network
+appliances. Somebody decided that all of these machines need a
+`birthDate` field in their system packages. We remove it.
 
 ## The problem
 
