@@ -60,3 +60,6 @@ BryanLunduke/DoesItAgeVerify#11
 canonical/ubuntu-desktop-provision#1198
 UKWX/UKWX.github.io#191
 verse-pbc/plur#142
+archlinux/archinstall#3607
+archlinux/archinstall#3141
+archlinux/archinstall#3125
