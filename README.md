@@ -110,7 +110,9 @@ Fedora, Void, Gentoo, or anything else, open a PR.
 |---------|---------------|--------|
 | **systemd** | `birthDate` in userdb records, `--birth-date` in homectl | [Merged](https://github.com/systemd/systemd/pull/40954). [Revert](https://github.com/systemd/systemd/pull/41179) was closed. |
 | **xdg-desktop-portal** | `QueryAgeBracket` D-Bus method | [Draft](https://github.com/flatpak/xdg-desktop-portal/pull/1922) |
+| **xdg-specs** | Age verification signal specification | [Closed](https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113) after community pushback |
 | **accountsservice** | `BirthDate` property with polkit-gated get/set | [Open](https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176) |
+| **Ubuntu D-Bus proposal** | `org.freedesktop.AgeVerification1` with SetAge, SetDateOfBirth, GetAgeBracket | [Proposed](https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043510.html) on ubuntu-devel. Technical blueprint for distro compliance. |
 
 ### Installers and desktops
 

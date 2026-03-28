@@ -316,7 +316,8 @@ jobs:
               {'project':'systemd','repo':'systemd/systemd','component':'userdb','threat':'birthDate field in user records, --birth-date flag in homectl','pr_num':'#40954','pr':'https://github.com/systemd/systemd/pull/40954','author':'dylanmtaylor','patch':'available','notes':'Revert PR #41179 was closed, not merged. Code remains in main.'},
               {'project':'xdg-desktop-portal','repo':'flatpak/xdg-desktop-portal','component':'ParentalControls portal','threat':'QueryAgeBracket D-Bus method exposing user age ranges to apps','pr_num':'#1922','pr':'https://github.com/flatpak/xdg-desktop-portal/pull/1922','author':'davidedmundson','patch':'draft','notes':'KDE core developer. PR locked after heated debate.'},
               {'project':'accountsservice','repo':'accountsservice/accountsservice','component':'user accounts','threat':'BirthDate property with polkit-gated Get/Set methods','pr_num':'MR !176','pr':'https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176','author':'dylanmtaylor','patch':'none','notes':'Same author as systemd and archinstall PRs.'},
-              {'project':'xdg-specs','repo':'xdg/xdg-specs','component':'XDG specification','threat':'Age Verification Signal Specification for freedesktop','pr_num':'MR !113','pr':'https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113','author':'dylanmtaylor','patch':'n/a','notes':'Closed. Attempt to formalize age verification as an official XDG spec.'},
+              {'project':'xdg-specs','repo':'xdg/xdg-specs','component':'XDG specification','threat':'Age Verification Signal Specification for freedesktop','pr_num':'MR !113','pr':'https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113','author':'dylanmtaylor','patch':'n/a','notes':'Closed after community pushback. Attempt to formalize identity collection as an official XDG spec.'},
+              {'project':'Ubuntu','repo':'canonical/ubuntu-desktop-provision','component':'D-Bus interface','threat':'org.freedesktop.AgeVerification1 D-Bus interface proposal with SetAge, SetDateOfBirth, GetAgeBracket methods','pr_num':'proposal','pr':'https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043510.html','author':'aaronprisk','patch':'none','notes':'Proposed on ubuntu-devel mailing list. Technical blueprint for distro-level compliance. Not official Canonical policy yet.'},
               {'project':'archinstall','repo':'archlinux/archinstall','component':'installer','threat':'Required birth date field during user creation','pr_num':'#4290','pr':'https://github.com/archlinux/archinstall/pull/4290','author':'dylanmtaylor','patch':'none','notes':'Same author as systemd PR. Writes to userdb.'},
               {'project':'elementary OS','repo':'elementary/settings-useraccounts','component':'user settings','threat':'Age declaration UI in account creation','pr_num':'#270','pr':'https://github.com/elementary/settings-useraccounts/pull/270','author':'danirabbit','patch':'none','notes':'Author is the elementary OS founder.'},
               {'project':'elementary OS','repo':'elementary/portals','component':'desktop portals','threat':'Account portal exposing user info to applications','pr_num':'#180','pr':'https://github.com/elementary/portals/pull/180','author':'danirabbit','patch':'none','notes':'Portal-layer integration for age data.'},
@@ -352,7 +353,9 @@ jobs:
           # PR 40954 is merged (gh returns MERGED as state)
           for t in targets:
               if t['pr_num'] == '#40954': t['status'] = 'merged'
+              if t['pr_num'] == 'MR !113': t['status'] = 'closed'
               if t['pr_num'] == 'MR !353': t['status'] = 'satirical'
+              if t['pr_num'] == 'proposal': t['status'] = 'proposed'
 
           # scan distros/ for real patch files
           import os, glob
