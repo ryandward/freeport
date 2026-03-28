@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-28T16:05:32Z",
+  "updated": "2026-03-28T20:04:32Z",
   "targets": [
     {
       "project": "systemd",
@@ -46,8 +46,20 @@
       "pr": "https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113",
       "author": "dylanmtaylor",
       "patch": "n/a",
-      "notes": "Closed. Attempt to formalize age verification as an official XDG spec.",
-      "status": "open"
+      "notes": "Closed after community pushback. Attempt to formalize identity collection as an official XDG spec.",
+      "status": "closed"
+    },
+    {
+      "project": "Ubuntu",
+      "repo": "canonical/ubuntu-desktop-provision",
+      "component": "D-Bus interface",
+      "threat": "org.freedesktop.AgeVerification1 D-Bus interface proposal with SetAge, SetDateOfBirth, GetAgeBracket methods",
+      "pr_num": "proposal",
+      "pr": "https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043510.html",
+      "author": "aaronprisk",
+      "patch": "none",
+      "notes": "Proposed on ubuntu-devel mailing list. Technical blueprint for distro-level compliance. Not official Canonical policy yet.",
+      "status": "proposed"
     },
     {
       "project": "archinstall",
