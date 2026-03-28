@@ -312,6 +312,20 @@ jobs:
               except: pass
               return None
 
+          def gitlab_mr(host, project_path, iid):
+              try:
+                  encoded = project_path.replace('/', '%2F')
+                  url = 'https://{}/api/v4/projects/{}/merge_requests/{}'.format(host, encoded, iid)
+                  req = urllib.request.Request(url)
+                  with urllib.request.urlopen(req, timeout=10) as resp:
+                      data = json.loads(resp.read())
+                      state = data.get('state', 'unknown')
+                      if state == 'merged': return {'state': 'merged'}
+                      if state == 'closed': return {'state': 'closed'}
+                      return {'state': 'open'}
+              except: pass
+              return None
+
           targets = [
               {'project':'systemd','repo':'systemd/systemd','component':'userdb','threat':'birthDate field in user records, --birth-date flag in homectl','pr_num':'#40954','pr':'https://github.com/systemd/systemd/pull/40954','author':'dylanmtaylor','patch':'available','notes':'Revert PR #41179 was closed, not merged. Code remains in main.'},
               {'project':'xdg-desktop-portal','repo':'flatpak/xdg-desktop-portal','component':'ParentalControls portal','threat':'QueryAgeBracket D-Bus method exposing user age ranges to apps','pr_num':'#1922','pr':'https://github.com/flatpak/xdg-desktop-portal/pull/1922','author':'davidedmundson','patch':'draft','notes':'KDE core developer. PR locked after heated debate.'},
@@ -326,36 +340,45 @@ jobs:
               {'project':'Calamares','repo':'Calamares/calamares','component':'installer','threat':'Birth date field in user creation, writes to AccountsService and systemd userdb','pr_num':'#2499','pr':'https://codeberg.org/Calamares/calamares/pulls/2499','author':'dylanmtaylor','patch':'none','notes':'European project (Netherlands). Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda, KDE neon. US law pushed into EU infrastructure. Thread locked after heated pushback.'},
           ]
 
-          # try to get live status from github, codeberg, or gitlab
+          # resolve live status from github, codeberg, or gitlab APIs
           for t in targets:
               repo = t['repo']
-              num = t['pr_num'].lstrip('#')
+              pr_num = t['pr_num']
               pr_url = t.get('pr', '')
-              if 'codeberg.org' in pr_url and num.isdigit():
-                  info = codeberg_pr(repo, num)
-                  if info:
-                      t['status'] = info['state'].lower()
+
+              if pr_num.startswith('MR !'):
+                  iid = pr_num.split('!')[1]
+                  # figure out which gitlab host from the PR URL
+                  if 'gitlab.freedesktop.org' in pr_url:
+                      info = gitlab_mr('gitlab.freedesktop.org', repo, iid)
+                  elif 'gitlab.archlinux.org' in pr_url:
+                      info = gitlab_mr('gitlab.archlinux.org', repo, iid)
                   else:
-                      t['status'] = 'unknown'
-              elif num.isdigit():
+                      info = None
+                  t['status'] = info['state'] if info else 'unknown'
+              elif 'codeberg.org' in pr_url and pr_num.startswith('#'):
+                  num = pr_num.lstrip('#')
+                  info = codeberg_pr(repo, num)
+                  t['status'] = info['state'].lower() if info else 'unknown'
+              elif pr_num.startswith('#'):
+                  num = pr_num.lstrip('#')
                   info = gh_pr(repo, num)
                   if info:
                       t['status'] = info['state'].lower()
                       if t['status'] == 'closed': t['status'] = 'merged' if 'merge' in str(info).lower() else 'closed'
                   else:
                       t['status'] = 'unknown'
-              elif 'MR' in t['pr_num']:
-                  t['status'] = 'open'
-              else:
+              elif pr_num == 'repo':
                   t['status'] = 'active'
+              elif pr_num == 'proposal':
+                  t['status'] = 'proposed'
+              else:
+                  t['status'] = 'unknown'
 
-          # hardcode known statuses where API is wrong
-          # PR 40954 is merged (gh returns MERGED as state)
+          # only override where the API genuinely returns the wrong thing
           for t in targets:
               if t['pr_num'] == '#40954': t['status'] = 'merged'
-              if t['pr_num'] == 'MR !113': t['status'] = 'closed'
-              if t['pr_num'] == 'MR !353': t['status'] = 'satirical'
-              if t['pr_num'] == 'proposal': t['status'] = 'proposed'
+              if t.get('notes', '').startswith('Satirical'): t['status'] = 'satirical'
 
           # scan distros/ for real patch files
           import os, glob
