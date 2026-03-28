@@ -35,13 +35,12 @@ like systemd, accountsservice, and xdg-desktop-portal.
 
 These bills share a common template (the ICMEC "Digital Age Assurance
 Act") and none contain exemptions for open source, non-commercial
-software, or infrastructure deployments. The [TBOTE Project](https://tboteproject.com)
+software, or infrastructure deployments. The [TBOTE Project](https://www.reddit.com/r/linux/comments/1rtd51g/update_i_pulled_irs_filings_for_the_org_that/)
 has documented through IRS filings, Senate lobbying disclosures, and
 state ethics records that Meta funded the advocacy group pushing these
 bills nationally while writing the legislation to exclude social media
 platforms from its own requirements.
-([full investigation](https://www.reddit.com/r/linux/comments/1rtd51g/update_i_pulled_irs_filings_for_the_org_that/),
-[findings repo](https://tboteproject.com/git/hekate/attestation-findings))
+([findings repo](https://github.com/upper-up/meta-lobbying-and-other-findings))
 
 This code ships to every machine that installs these packages. Your
 Kubernetes nodes get the same `birthDate` field as a laptop. The law
@@ -161,12 +160,11 @@ Open an issue. Start a discussion.
 
 ## Related
 
-- [TBOTE Project](https://tboteproject.com)
+- [TBOTE Project](https://www.reddit.com/r/linux/comments/1rtd51g/update_i_pulled_irs_filings_for_the_org_that/)
   pulled IRS 990s, Senate lobbying disclosures, state ethics records,
   and campaign finance data to document the lobbying operation behind
-  these bills. The
-  [findings repo](https://tboteproject.com/git/hekate/attestation-findings)
-  has every source.
+  these bills.
+  [Findings repo](https://github.com/upper-up/meta-lobbying-and-other-findings).
 - [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance)
   tracks identity collection across the Linux stack. No patches.
 - [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify)
