@@ -16,11 +16,32 @@ appliances. Somebody decided that all of these machines need a
 
 ## The problem
 
-New legislation (California AB 1043, Colorado SB 26-051, Brazil Lei
-15.211) requires operating systems to report user age brackets through
+Legislation in multiple US states and Brazil requires operating
+systems to collect user birth dates and expose age brackets through
 a real time API. In response, `birthDate` fields, D-Bus interfaces,
 and installer prompts are being added to core open source packages
 like systemd, accountsservice, and xdg-desktop-portal.
+
+| State | Bill | Status |
+|-------|------|--------|
+| California | AB 1043 | Enacted, effective Jan 1, 2027 |
+| Colorado | SB 26-051 | Passed Senate, in House committee |
+| Louisiana | HB 570 | Enacted, effective July 1, 2026 |
+| Utah | SB 142 | Enacted |
+| New York | S8102A | Pending |
+| Illinois | HB 3304, HB 4140, SB 2037 | Pending |
+| Federal | KOSA, ASAA | Pending |
+| Brazil | Lei 15.211 | Enacted |
+
+These bills share a common template (the ICMEC "Digital Age Assurance
+Act") and none contain exemptions for open source, non-commercial
+software, or infrastructure deployments. The [TBOTE Project](https://tboteproject.com)
+has documented through IRS filings, Senate lobbying disclosures, and
+state ethics records that Meta funded the advocacy group pushing these
+bills nationally while writing the legislation to exclude social media
+platforms from its own requirements.
+([full investigation](https://www.reddit.com/r/linux/comments/1rtd51g/update_i_pulled_irs_filings_for_the_org_that/),
+[findings repo](https://tboteproject.com/git/hekate/attestation-findings))
 
 This code ships to every machine that installs these packages. Your
 Kubernetes nodes get the same `birthDate` field as a laptop. The law
@@ -116,12 +137,18 @@ The patch removes:
 Nothing else is touched. No other user record fields, no general
 date/time parsing, no other systemd functionality.
 
-## Distros that have refused
+## Distro responses
 
-- [Garuda Linux](https://linuxiac.com/garuda-linux-says-no-to-age-verification-outside-legal-requirement/)
-  will not implement outside legal requirement
-- Artix, Alpine, antiX are systemd-free
-- Void Linux, Devuan, OpenBSD have stated opposition
+**Complying:** Fedora (project leader [confirmed compliance](https://lunduke.substack.com/p/slackware-says-no-to-age-verification)),
+Ubuntu (reviewing with legal), elementary OS (following Ubuntu),
+Pop!_OS (considering minimal changes)
+
+**Refusing:** Slackware, Garuda Linux, Adenix, Omarchy,
+MidnightBSD (banned CA residents from desktop use)
+
+**Systemd-free (not affected):** Artix, Alpine, antiX, Void, Devuan
+
+**Silent:** Arch, SUSE, NixOS, Linux Mint
 
 ## Help wanted
 
@@ -134,6 +161,12 @@ Open an issue. Start a discussion.
 
 ## Related
 
+- [TBOTE Project](https://tboteproject.com)
+  pulled IRS 990s, Senate lobbying disclosures, state ethics records,
+  and campaign finance data to document the lobbying operation behind
+  these bills. The
+  [findings repo](https://tboteproject.com/git/hekate/attestation-findings)
+  has every source.
 - [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance)
   tracks identity collection across the Linux stack. No patches.
 - [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify)
