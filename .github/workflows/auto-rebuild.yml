@@ -116,15 +116,24 @@ jobs:
             fi
 
             chown -R builder:builder "$pkg_dir"
-            if su builder -c "cd $pkg_dir && makepkg -so --noconfirm" 2>&1; then
-              echo "${pkg}: patches apply clean, building"
-              if su builder -c "cd $pkg_dir && makepkg -s --noconfirm --nocheck" 2>&1 || true; then
-                # check if packages were actually produced
-                if ls ${pkg_dir}/*.pkg.tar.* >/dev/null 2>&1; then
-                  needs_rebuild="${needs_rebuild} ${pkg}"
-                else
-                  patch_failures="${patch_failures}${pkg}: build produced no packages\n"
-                fi
+
+            # makepkg may exit non-zero due to git warnings even on a successful build
+            # so we check for actual package files instead of trusting the exit code
+            set +e
+            su builder -c "cd $pkg_dir && makepkg -so --noconfirm" 2>&1
+            prep_ok=$?
+            set -e
+
+            if [ "$prep_ok" -eq 0 ] || ls ${pkg_dir}/src/*/meson.build >/dev/null 2>&1; then
+              echo "${pkg}: source prepared, building"
+              set +e
+              su builder -c "cd $pkg_dir && makepkg -s --noconfirm --nocheck" 2>&1
+              set -e
+
+              if ls ${pkg_dir}/*.pkg.tar.* >/dev/null 2>&1; then
+                needs_rebuild="${needs_rebuild} ${pkg}"
+              else
+                patch_failures="${patch_failures}${pkg}: build produced no packages\n"
               fi
             else
               patch_failures="${patch_failures}${pkg}: patches do not apply to ${arch_ver}\n"
