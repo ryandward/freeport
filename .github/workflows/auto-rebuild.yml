@@ -33,8 +33,7 @@ jobs:
       - name: install tools
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm --needed base-devel devtools git jq github-cli
-          pacman -S --noconfirm --needed asp || pip install asp-archlinux || echo "asp not available, using git clone fallback"
+          pacman -S --noconfirm --needed base-devel devtools git jq github-cli curl
 
       - name: create build user
         run: |
@@ -73,8 +72,13 @@ jobs:
             fi
 
             our_ver=$(grep '^pkgver=' "$pkg_dir/PKGBUILD" | cut -d= -f2)
-            asp export "$pkg" /tmp/asp-${pkg} 2>/dev/null || continue
-            arch_ver=$(grep '^pkgver=' "/tmp/asp-${pkg}/PKGBUILD" | cut -d= -f2)
+
+            # get current Arch version from GitLab API
+            arch_ver=$(curl -sf "https://gitlab.archlinux.org/api/v4/projects/archlinux%2Fpackaging%2Fpackages%2F${pkg}/repository/files/PKGBUILD/raw?ref=main" 2>/dev/null | grep '^pkgver=' | cut -d= -f2)
+            if [ -z "$arch_ver" ]; then
+              echo "${pkg}: could not fetch Arch version, skipping"
+              continue
+            fi
 
             echo "${pkg}: ours=${our_ver} arch=${arch_ver}"
 
@@ -85,9 +89,11 @@ jobs:
 
             echo "${pkg}: new version detected, updating"
 
+            # clone the new PKGBUILD from Arch GitLab, preserve our patches
             cp -r "$pkg_dir/patches" /tmp/patches-${pkg}
             rm -rf "$pkg_dir"
-            cp -r "/tmp/asp-${pkg}" "$pkg_dir"
+            git clone --depth 1 "https://gitlab.archlinux.org/archlinux/packaging/packages/${pkg}.git" "$pkg_dir"
+            rm -rf "$pkg_dir/.git"
             cp -r /tmp/patches-${pkg} "$pkg_dir/patches"
 
             # inject freeport patch loop into prepare() if not present
