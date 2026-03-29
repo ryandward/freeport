@@ -59,8 +59,9 @@ jobs:
       - name: check for upstream version bumps and rebuild
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
+        shell: bash --noprofile --norc {0}
         run: |
+          set -o pipefail
           needs_rebuild=""
           patch_failures=""
 
@@ -116,27 +117,16 @@ jobs:
             fi
 
             chown -R builder:builder "$pkg_dir"
+            su builder -c "cd $pkg_dir && makepkg -so --noconfirm" 2>&1 || true
 
-            # makepkg may exit non-zero due to git warnings even on a successful build
-            # so we check for actual package files instead of trusting the exit code
-            set +e
-            su builder -c "cd $pkg_dir && makepkg -so --noconfirm" 2>&1
-            prep_ok=$?
-            set -e
+            su builder -c "cd $pkg_dir && makepkg -s --noconfirm --nocheck" 2>&1 || true
 
-            if [ "$prep_ok" -eq 0 ] || ls ${pkg_dir}/src/*/meson.build >/dev/null 2>&1; then
-              echo "${pkg}: source prepared, building"
-              set +e
-              su builder -c "cd $pkg_dir && makepkg -s --noconfirm --nocheck" 2>&1
-              set -e
-
-              if ls ${pkg_dir}/*.pkg.tar.* >/dev/null 2>&1; then
-                needs_rebuild="${needs_rebuild} ${pkg}"
-              else
-                patch_failures="${patch_failures}${pkg}: build produced no packages\n"
-              fi
+            if ls ${pkg_dir}/*.pkg.tar.* >/dev/null 2>&1; then
+              echo "${pkg}: build succeeded"
+              needs_rebuild="${needs_rebuild} ${pkg}"
             else
-              patch_failures="${patch_failures}${pkg}: patches do not apply to ${arch_ver}\n"
+              echo "${pkg}: build failed"
+              patch_failures="${patch_failures}${pkg}: build failed for ${arch_ver}\n"
             fi
           done
 
