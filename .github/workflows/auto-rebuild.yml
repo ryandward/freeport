@@ -93,7 +93,6 @@ jobs:
             cp -r "$pkg_dir/patches" /tmp/patches-${pkg}
             rm -rf "$pkg_dir"
             git clone --depth 1 "https://gitlab.archlinux.org/archlinux/packaging/packages/${pkg}.git" "$pkg_dir"
-            rm -rf "$pkg_dir/.git"
             cp -r /tmp/patches-${pkg} "$pkg_dir/patches"
 
             # inject freeport patch loop into prepare() if not present
