@@ -64,3 +64,5 @@ archlinux/archinstall#3607
 archlinux/archinstall#3141
 archlinux/archinstall#3125
 MidnightBSD/src#302
+michalusio/rOSt#96
+cvtreharne-cvt/fortaleza-purchase-agent#21
