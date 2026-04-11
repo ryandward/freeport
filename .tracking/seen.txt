@@ -69,3 +69,5 @@ cvtreharne-cvt/fortaleza-purchase-agent#21
 elementary/settings-useraccounts#270
 systemd/systemd#41525
 croweykid/ephemeraldaddy#655
+archlinux/archinstall#4331
+archlinux/archinstall#4359
