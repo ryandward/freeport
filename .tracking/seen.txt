@@ -73,3 +73,5 @@ archlinux/archinstall#4331
 archlinux/archinstall#4359
 dehy/archery-manager#111
 bluesky-social/social-app#10053
+NorthskySocial/indieapp#28
+Kron00/liveoakjiujitsu#4
