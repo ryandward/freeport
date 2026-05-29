@@ -79,3 +79,4 @@ archlinux/archinstall#4429
 archlinux/archinstall#4427
 safe-agentic-framework/safe-agentic-use-cases#34
 FabioLeitao/data-boar#307
+DobosP/social_media_activities_app#12
