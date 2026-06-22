@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-22T09:56:07Z",
+  "updated": "2026-06-22T13:48:04Z",
   "targets": [
     {
       "project": "systemd",
@@ -35,7 +35,7 @@
       "author": "dylanmtaylor",
       "patch": "none",
       "notes": "Same author as systemd and archinstall PRs.",
-      "status": "unknown"
+      "status": "open"
     },
     {
       "project": "xdg-specs",
