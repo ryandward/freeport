@@ -88,3 +88,7 @@ eurosky-social/eurosky-social-app#53
 eurosky-social/eurosky-social-app#45
 eurosky-social/eurosky-social-app#42
 EtroxTaran/klubhaus-elf#232
+eurosky-social/eurosky-social-app#122
+eurosky-social/eurosky-social-app#121
+CIRISAI/CIRISServer#39
+eurosky-social/eurosky-social-app#118
