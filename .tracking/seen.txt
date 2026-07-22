@@ -100,3 +100,5 @@ issacyeungbb-a11y/Jacob#8
 lingolinq/LingoLinq-AAC#560
 Rahul-s-Test-Organization/NodeGoat#8
 systemd/systemd#43065
+rwm6857/GraceChords#442
+jussray/Sekret-Bip#566
