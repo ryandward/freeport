@@ -102,3 +102,4 @@ Rahul-s-Test-Organization/NodeGoat#8
 systemd/systemd#43065
 rwm6857/GraceChords#442
 jussray/Sekret-Bip#566
+capawesome-team/capacitor-plugins#938
