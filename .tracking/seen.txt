@@ -105,3 +105,5 @@ jussray/Sekret-Bip#566
 capawesome-team/capacitor-plugins#938
 systemd/systemd#43195
 kaxmedia/Playwright-Tests#136
+mkallberg21/Conic#10
+mkallberg21/Conic#8
