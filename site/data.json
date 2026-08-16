@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-16T12:03:29Z",
+  "updated": "2026-08-16T16:02:46Z",
   "targets": [
     {
       "project": "systemd",
@@ -35,7 +35,7 @@
       "author": "dylanmtaylor",
       "patch": "none",
       "notes": "Same author as systemd and archinstall PRs.",
-      "status": "unknown"
+      "status": "open"
     },
     {
       "project": "xdg-specs",
@@ -47,7 +47,7 @@
       "author": "dylanmtaylor",
       "patch": "n/a",
       "notes": "Closed after community pushback. Attempt to formalize identity collection as an official XDG spec.",
-      "status": "unknown"
+      "status": "closed"
     },
     {
       "project": "Ubuntu",
