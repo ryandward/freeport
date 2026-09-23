@@ -116,3 +116,5 @@ systemd/systemd#42983
 worldlabsprotocol-ux/abraxas-app#260
 woocommerce/woocommerce-ios#17826
 iamnbutler/shelfgoblin#2
+discord/discord-api-docs#8622
+woocommerce/woocommerce-ios#17909
