@@ -118,3 +118,4 @@ woocommerce/woocommerce-ios#17826
 iamnbutler/shelfgoblin#2
 discord/discord-api-docs#8622
 woocommerce/woocommerce-ios#17909
+bloodyvlad/pimpopom-ios#2
