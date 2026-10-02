@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-02T16:02:43Z",
+  "updated": "2026-10-02T20:02:45Z",
   "targets": [
     {
       "project": "systemd",
@@ -47,7 +47,7 @@
       "author": "dylanmtaylor",
       "patch": "n/a",
       "notes": "Closed after community pushback. Attempt to formalize identity collection as an official XDG spec.",
-      "status": "closed"
+      "status": "unknown"
     },
     {
       "project": "Ubuntu",
