@@ -1,0 +1,97 @@
+name: tracker
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run check
+
+      - run: npm test
+
+      - run: node src/main.ts validate
+
+  publish:
+    # never from a pull request, and never from a manual run on another branch,
+    # because this job pushes to main
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    concurrency:
+      group: tracker-publish
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+
+      - run: npm ci
+
+      - name: check every change against its forge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node src/main.ts refresh | tee refresh.log
+
+      - name: record what changed
+        run: |
+          if [ -z "$(git status --porcelain -- data/state.json data/events.jsonl)" ]; then
+            echo "nothing to record"
+            exit 0
+          fi
+          git config user.name "freeport-bot"
+          git config user.email "freeport-bot@users.noreply.github.com"
+          git add data/state.json data/events.jsonl
+          git commit -m "$(tail -n 1 refresh.log)"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: build the page
+        run: node src/main.ts build
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: fail when a change has gone unconfirmed for a day
+        run: node src/main.ts overdue

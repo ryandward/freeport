@@ -1,0 +1,68 @@
+{
+  "accountsservice-176": {
+    "state": "open",
+    "since": "2026-03-06T20:43:59Z",
+    "author": "dylanmtaylor",
+    "unconfirmed_since": null
+  },
+  "archinstall-4290": {
+    "state": "draft",
+    "since": "2026-03-06T20:10:51Z",
+    "author": "dylanmtaylor",
+    "unconfirmed_since": null
+  },
+  "calamares-2499": {
+    "state": "draft",
+    "since": "2026-03-07T02:05:41Z",
+    "author": "dylanmtaylor",
+    "unconfirmed_since": null
+  },
+  "elementary-portals-180": {
+    "state": "merged",
+    "since": "2026-03-25T14:02:45Z",
+    "author": "danirabbit",
+    "unconfirmed_since": null
+  },
+  "elementary-settings-useraccounts-270": {
+    "state": "draft",
+    "since": "2026-03-02T18:46:39Z",
+    "author": "danirabbit",
+    "unconfirmed_since": null
+  },
+  "midnightbsd-302": {
+    "state": "merged",
+    "since": "2026-03-09T00:23:16Z",
+    "author": "laffer1",
+    "unconfirmed_since": null
+  },
+  "pacman-353": {
+    "state": "closed",
+    "since": "2026-03-24T11:37:08Z",
+    "author": "allan",
+    "unconfirmed_since": null
+  },
+  "systemd-40954": {
+    "state": "merged",
+    "since": "2026-03-18T23:04:03Z",
+    "author": "dylanmtaylor",
+    "unconfirmed_since": null
+  },
+  "ubuntu-desktop-provision-1326": {
+    "state": "closed",
+    "since": "2026-03-06T00:24:10Z",
+    "author": "dylanmtaylor",
+    "unconfirmed_since": null
+  },
+  "xdg-desktop-portal-1922": {
+    "state": "closed",
+    "since": "2026-04-13T12:32:29Z",
+    "author": "davidedmundson",
+    "unconfirmed_since": null
+  },
+  "xdg-specs-113": {
+    "state": "closed",
+    "since": "2026-03-10T12:27:57Z",
+    "author": "dylanmtaylor",
+    "unconfirmed_since": null
+  }
+}
