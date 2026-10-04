@@ -2,10 +2,10 @@ name: deploy site
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'site/**'
-    tags-ignore:
-      - '**'
   workflow_dispatch:
 
 permissions:
@@ -24,6 +24,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: test the dashboard
+        run: node --test tests/*.test.mjs
 
       - uses: actions/configure-pages@v4
 
