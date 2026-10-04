@@ -204,6 +204,11 @@ const refusals: [string, Record<string, string>, string[]][] = [
     ['bills/us-ca-ab1043.toml: `checked` must be a date written YYYY-MM-DD'],
   ],
   [
+    'a folder the tracker does not know, such as a misspelled one',
+    { 'chnages/systemd-40954.toml': CHANGE },
+    ['chnages: only projects/, changes/, bills/, state.json and events.jsonl belong here'],
+  ],
+  [
     'two changes track the same pull request',
     { 'changes/systemd-again.toml': CHANGE.replace('pull/40954', 'pull/40954/files') },
     ['changes/systemd-again.toml: tracks the same url as systemd-40954'],
@@ -220,6 +225,16 @@ test('refused: a file that is not valid toml', () => {
   const errors = errorsFor({ 'bills/us-ca-ab1043.toml': 'status = ' });
   assert.equal(errors.length, 1);
   assert.match(errors[0] ?? '', /^bills\/us-ca-ab1043\.toml: Invalid TOML document/);
+});
+
+test('a data directory that does not exist is refused, not read as empty', () => {
+  const dir = join(tmpdir(), 'freeport-there-is-no-such-directory');
+  assert.deepEqual(load(dir), { ok: false, errors: [`${dir}: no such directory`] });
+});
+
+test("the bot's two files may sit next to the records", () => {
+  const loaded = load(dataDir({ ...VALID, 'state.json': '{}\n', 'events.jsonl': '' }));
+  assert.ok(loaded.ok, loaded.ok ? '' : loaded.errors.join('\n'));
 });
 
 test('every problem is reported in one pass', () => {

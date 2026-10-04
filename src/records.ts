@@ -52,6 +52,10 @@ export type Loaded = { ok: true; records: Records } | { ok: false; errors: strin
 
 const ID = /^[a-z0-9-]+$/;
 const KEPT_BY_BOT = ['state', 'author', 'checked'];
+// Everything the data directory may hold. A name outside this list is refused, so a
+// misspelled folder cannot quietly drop its records.
+const KINDS = ['projects', 'changes', 'bills'];
+const BOT_FILES = ['state.json', 'events.jsonl'];
 
 function isHttpUrl(value: string): boolean {
   return URL.canParse(value) && ['http:', 'https:'].includes(new URL(value).protocol);
@@ -260,7 +264,13 @@ function readKind<T>(
 }
 
 export function load(dir: string): Loaded {
+  if (!existsSync(dir)) return { ok: false, errors: [`${dir}: no such directory`] };
   const errors: string[] = [];
+  for (const name of readdirSync(dir).sort()) {
+    if (!KINDS.includes(name) && !BOT_FILES.includes(name)) {
+      errors.push(`${name}: only projects/, changes/, bills/, state.json and events.jsonl belong here`);
+    }
+  }
   const projects = readKind(dir, 'projects', errors, parseProject);
   const changes = readKind(dir, 'changes', errors, parseChange);
   const bills = readKind(dir, 'bills', errors, parseBill);
