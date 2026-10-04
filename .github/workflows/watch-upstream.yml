@@ -327,17 +327,17 @@ jobs:
               return None
 
           targets = [
-              {'project':'systemd','repo':'systemd/systemd','component':'userdb','threat':'birthDate field in user records, --birth-date flag in homectl','pr_num':'#40954','pr':'https://github.com/systemd/systemd/pull/40954','author':'dylanmtaylor','patch':'available','notes':'Revert PR #41179 was closed, not merged. Code remains in main.'},
-              {'project':'xdg-desktop-portal','repo':'flatpak/xdg-desktop-portal','component':'ParentalControls portal','threat':'QueryAgeBracket D-Bus method exposing user age ranges to apps','pr_num':'#1922','pr':'https://github.com/flatpak/xdg-desktop-portal/pull/1922','author':'davidedmundson','patch':'draft','notes':'KDE core developer. PR locked after heated debate.'},
-              {'project':'accountsservice','repo':'accountsservice/accountsservice','component':'user accounts','threat':'BirthDate property with polkit-gated Get/Set methods','pr_num':'MR !176','pr':'https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176','author':'dylanmtaylor','patch':'none','notes':'Same author as systemd and archinstall PRs.'},
-              {'project':'xdg-specs','repo':'xdg/xdg-specs','component':'XDG specification','threat':'Age Verification Signal Specification for freedesktop','pr_num':'MR !113','pr':'https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113','author':'dylanmtaylor','patch':'n/a','notes':'Closed after community pushback. Attempt to formalize identity collection as an official XDG spec.'},
-              {'project':'Ubuntu','repo':'canonical/ubuntu-desktop-provision','component':'D-Bus interface','threat':'org.freedesktop.AgeVerification1 D-Bus interface proposal with SetAge, SetDateOfBirth, GetAgeBracket methods','pr_num':'proposal','pr':'https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043510.html','author':'aaronprisk','patch':'none','notes':'Proposed on ubuntu-devel mailing list. Technical blueprint for distro-level compliance. Not official Canonical policy yet.'},
-              {'project':'archinstall','repo':'archlinux/archinstall','component':'installer','threat':'Required birth date field during user creation','pr_num':'#4290','pr':'https://github.com/archlinux/archinstall/pull/4290','author':'dylanmtaylor','patch':'none','notes':'Same author as systemd PR. Writes to userdb.'},
-              {'project':'elementary OS','repo':'elementary/settings-useraccounts','component':'user settings','threat':'Age declaration UI in account creation','pr_num':'#270','pr':'https://github.com/elementary/settings-useraccounts/pull/270','author':'danirabbit','patch':'none','notes':'Author is the elementary OS founder.'},
-              {'project':'elementary OS','repo':'elementary/portals','component':'desktop portals','threat':'Account portal exposing user info to applications','pr_num':'#180','pr':'https://github.com/elementary/portals/pull/180','author':'danirabbit','patch':'none','notes':'Portal-layer integration for age data.'},
-              {'project':'pacman','repo':'pacman/pacman','component':'package manager','threat':'agerequirement field in PKGBUILDs','pr_num':'MR !353','pr':'https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353','author':'allan','patch':'watching','notes':'Satirical MR from the pacman maintainer. Watching for real attempts.'},
-              {'project':'ageverifyd','repo':'outerheaven199X/ageverifyd','component':'D-Bus daemon','threat':'Reference implementation of org.freedesktop.AgeVerification1','pr_num':'repo','pr':'https://github.com/outerheaven199X/ageverifyd','author':'outerheaven199X','patch':'n/a','notes':'Standalone daemon. SetAge, SetDateOfBirth, GetAgeBracket methods.'},
-              {'project':'Calamares','repo':'Calamares/calamares','component':'installer','threat':'Birth date field in user creation, writes to AccountsService and systemd userdb','pr_num':'#2499','pr':'https://codeberg.org/Calamares/calamares/pulls/2499','author':'dylanmtaylor','patch':'none','notes':'European project (Netherlands). Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda, KDE neon. US law pushed into EU infrastructure. Thread locked after heated pushback.'},
+              {'project':'systemd','repo':'systemd/systemd','component':'userdb','threat':'birthDate field in user records, --birth-date flag in homectl','pr_num':'#40954','pr':'https://github.com/systemd/systemd/pull/40954','author':'dylanmtaylor','notes':'Revert PR #41179 was closed, not merged. Code remains in main.'},
+              {'project':'xdg-desktop-portal','repo':'flatpak/xdg-desktop-portal','component':'ParentalControls portal','threat':'QueryAgeBracket D-Bus method exposing user age ranges to apps','pr_num':'#1922','pr':'https://github.com/flatpak/xdg-desktop-portal/pull/1922','author':'davidedmundson','notes':'KDE core developer. PR locked after heated debate.'},
+              {'project':'accountsservice','repo':'accountsservice/accountsservice','component':'user accounts','threat':'BirthDate property with polkit-gated Get/Set methods','pr_num':'MR !176','pr':'https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176','author':'dylanmtaylor','notes':'Same author as systemd and archinstall PRs.'},
+              {'project':'xdg-specs','repo':'xdg/xdg-specs','component':'XDG specification','threat':'Age Verification Signal Specification for freedesktop','pr_num':'MR !113','pr':'https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113','author':'dylanmtaylor','notes':'Closed after community pushback. Attempt to formalize identity collection as an official XDG spec.'},
+              {'project':'Ubuntu','repo':'canonical/ubuntu-desktop-provision','component':'D-Bus interface','threat':'org.freedesktop.AgeVerification1 D-Bus interface proposal with SetAge, SetDateOfBirth, GetAgeBracket methods','pr_num':'proposal','pr':'https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043510.html','author':'aaronprisk','notes':'Proposed on ubuntu-devel mailing list. Technical blueprint for distro-level compliance. Not official Canonical policy yet.'},
+              {'project':'archinstall','repo':'archlinux/archinstall','component':'installer','threat':'Required birth date field during user creation','pr_num':'#4290','pr':'https://github.com/archlinux/archinstall/pull/4290','author':'dylanmtaylor','notes':'Same author as systemd PR. Writes to userdb.'},
+              {'project':'elementary OS','repo':'elementary/settings-useraccounts','component':'user settings','threat':'Age declaration UI in account creation','pr_num':'#270','pr':'https://github.com/elementary/settings-useraccounts/pull/270','author':'danirabbit','notes':'Author is the elementary OS founder.'},
+              {'project':'elementary OS','repo':'elementary/portals','component':'desktop portals','threat':'Account portal exposing user info to applications','pr_num':'#180','pr':'https://github.com/elementary/portals/pull/180','author':'danirabbit','notes':'Portal-layer integration for age data.'},
+              {'project':'pacman','repo':'pacman/pacman','component':'package manager','threat':'agerequirement field in PKGBUILDs','pr_num':'MR !353','pr':'https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353','author':'allan','notes':'Satirical MR from the pacman maintainer. Watching for real attempts.'},
+              {'project':'ageverifyd','repo':'outerheaven199X/ageverifyd','component':'D-Bus daemon','threat':'Reference implementation of org.freedesktop.AgeVerification1','pr_num':'repo','pr':'https://github.com/outerheaven199X/ageverifyd','author':'outerheaven199X','notes':'Standalone daemon. SetAge, SetDateOfBirth, GetAgeBracket methods.'},
+              {'project':'Calamares','repo':'Calamares/calamares','component':'installer','threat':'Birth date field in user creation, writes to AccountsService and systemd userdb','pr_num':'#2499','pr':'https://codeberg.org/Calamares/calamares/pulls/2499','author':'dylanmtaylor','notes':'European project (Netherlands). Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda, KDE neon. US law pushed into EU infrastructure. Thread locked after heated pushback.'},
           ]
 
           # resolve live status from github, codeberg, or gitlab APIs
@@ -380,18 +380,7 @@ jobs:
               if t['pr_num'] == '#40954': t['status'] = 'merged'
               if t.get('notes', '').startswith('Satirical'): t['status'] = 'satirical'
 
-          # scan distros/ for real patch files
-          import os, glob
-          patches = []
-          for pf in sorted(glob.glob('distros/*/*/patches/*.patch')):
-              parts = pf.split('/')
-              distro = parts[1]
-              package = parts[2]
-              # draft if filename contains 'draft' or 'remove', verified otherwise
-              status = 'draft' if 'draft' in pf or 'remove' in pf else 'verified'
-              patches.append({'package': package, 'distro': distro, 'status': status, 'file': pf})
-
-          data = {'updated': '$now', 'targets': targets, 'patches': patches}
+          data = {'updated': '$now', 'targets': targets}
           with open('site/data.json', 'w') as f:
               json.dump(data, f, indent=2)
           print('site/data.json generated')

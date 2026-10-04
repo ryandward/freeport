@@ -18,7 +18,7 @@
     <nav class="stack">
       <a class="app-nav-link" href="#threats">Upstream threats</a>
       <a class="app-nav-link" href="#laws">Legal pressure</a>
-      <a class="app-nav-link" href="#patches">Patches</a>
+      <a class="app-nav-link" href="#packages">Packages</a>
       <a class="app-nav-link" href="https://github.com/ryandward/freeport">GitHub</a>
       <a class="app-nav-link" href="https://github.com/ryandward/freeport/issues/1">Tracking issue</a>
     </nav>
@@ -32,7 +32,7 @@
           <h1>freeport</h1>
           <p>
             Tracking age verification infrastructure as it enters the
-            Linux package ecosystem. Patches maintained. Packages rebuilt.
+            Linux package ecosystem.
           </p>
         </header>
 
@@ -43,8 +43,17 @@
         <section class="section" id="threats">
           <h2>Upstream threats</h2>
           <div class="threat-list" id="targets"></div>
-          <h2>Patches</h2>
-          <div class="threat-list" id="patches-list"></div>
+        </section>
+
+        <section class="section" id="packages">
+          <h2>Packages</h2>
+          <p>
+            freeport no longer ships packages and the pacman repo is
+            gone. The systemd builds from 261-1 on went out without
+            the patch. If you added the repo, the
+            <a href="https://github.com/ryandward/freeport#the-pacman-repo-is-gone">README</a>
+            says how to remove it.
+          </p>
         </section>
 
         <section class="section" id="actors">
@@ -80,19 +89,16 @@ fetch('data.json').then(function(r) { return r.json(); }).then(render);
 function render(data) {
   var merged = data.targets.filter(function(t) { return t.status === 'merged'; }).length;
   var active = data.targets.filter(function(t) { return t.status === 'open' || t.status === 'draft' || t.status === 'active'; }).length;
-  var ready = data.patches.filter(function(p) { return p.status === 'verified'; }).length;
 
   document.getElementById('gauges').innerHTML =
     stat(merged, 'merged', 'color-danger') +
     stat(active, 'in progress', 'color-warning') +
-    stat(ready, 'patched', 'color-success') +
     stat(data.targets.length, 'tracked', '');
 
   document.getElementById('scan-time').textContent =
     'last scan ' + new Date(data.updated).toUTCString();
 
   document.getElementById('targets').innerHTML = data.targets.map(target).join('');
-  document.getElementById('patches-list').innerHTML = data.patches.map(patch).join('');
 
   // leaderboard: count PRs per author, sort descending
   var counts = {};
@@ -134,20 +140,8 @@ function target(t) {
     '<footer>' +
       '<a href="' + t.pr + '">' + t.pr_num + '</a>' +
       '<span>' + t.author + '</span>' +
-      '<span class="badge" data-status="' + t.patch + '">' + t.patch + '</span>' +
     '</footer>' +
     (t.notes ? '<p class="notes">' + t.notes + '</p>' : '') +
-  '</div>';
-}
-
-function patch(p) {
-  var url = 'https://github.com/ryandward/freeport/blob/main/' + p.file;
-  return '<div class="info-card">' +
-    '<header>' +
-      '<div><strong>' + p.package + '</strong> <em>' + p.distro + '</em></div>' +
-      '<span class="badge" data-status="' + p.status + '">' + p.status + '</span>' +
-    '</header>' +
-    '<small><a href="' + url + '">view patch</a></small>' +
   '</div>';
 }
 </script>

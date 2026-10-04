@@ -12,7 +12,8 @@ Asking your operating system to store a birth date is like asking a
 bridge to carry a passport. Linux runs server farms, HPC clusters,
 containers, CI pipelines, embedded controllers, and network
 appliances. Somebody decided that all of these machines need a
-`birthDate` field in their system packages. We remove it.
+`birthDate` field in their system packages. freeport keeps track of
+who.
 
 ## The problem
 
@@ -49,58 +50,38 @@ infrastructure.
 
 ## What we do
 
-freeport patches individual packages to remove identity collection
-fields, then rebuilds them. Your distro stays your distro. You swap
-one package. Everything else is untouched.
-
-We are not a fork. We do not maintain a parallel copy of systemd. We
-carry the minimum diff to remove the identity fields, and we apply it
-on top of whatever your distro ships.
+freeport tracks the politics, the projects, the money, and the people
+behind identity collection code in Linux.
 
 Every 4 hours we scan upstream for new identity collection code across
 GitHub, GitLab, and Codeberg. Findings go to
-[issue #1](https://github.com/ryandward/freeport/issues/1). Built
-packages are verified to contain zero identity collection strings
-before publishing.
+[issue #1](https://github.com/ryandward/freeport/issues/1).
 
-## Use it
+## The pacman repo is gone
 
-### Arch Linux
+freeport used to publish patched Arch packages through a pacman repo.
+That is over and the repo has been taken down.
 
-```bash
-sudo pacman-key --recv-keys B06E95AC8D45885FE6451B669D64B2DDC464B011 --keyserver keyserver.ubuntu.com
-sudo pacman-key --lsign-key B06E95AC8D45885FE6451B669D64B2DDC464B011
-```
+Not all of those packages were clean. The patch stopped applying at
+systemd 261, the nightly rebuild skipped it without failing, and
+nothing checked the result. Every systemd build from 261-1 on, from
+late June through October 4, shipped with the `birthDate` code still
+in it. The 260 builds were patched. `freeport-hook` never worked
+either. It did not inspect the packages it claimed to scan.
 
-Add to `/etc/pacman.conf` above `[core]`:
-
-```ini
-[freeport]
-Server = https://github.com/ryandward/freeport/releases/download/repo
-```
+If you added the repo, delete the `[freeport]` section from
+`/etc/pacman.conf`, then:
 
 ```bash
-sudo pacman -Syu freeport-hook
+sudo pacman -R freeport-hook
+sudo pacman-key --delete B06E95AC8D45885FE6451B669D64B2DDC464B011
+sudo pacman -Syu $(pacman -Qqn | grep '^systemd')
 ```
 
-`freeport-hook` scans every package before installation and blocks
-anything containing identity collection code. When Arch ships a new
-upstream version, freeport rebuilds it clean and publishes the update
-through the same repo.
+The last line puts you back on Arch's own systemd build.
 
-### Build from source
-
-```bash
-git clone https://github.com/ryandward/freeport.git
-cd freeport/distros/arch/systemd
-makepkg -si
-```
-
-### Other distros
-
-Patches are standard unified diffs against upstream source. The
-packaging around them is distro-specific. If you package for Debian,
-Fedora, Void, Gentoo, or anything else, open a PR.
+The [patch](https://github.com/ryandward/freeport/blob/20e949f85048d81dd5a2aa9ccb0a3286ae550ac2/distros/arch/systemd/patches/0001-revert-birthdate-userdb.patch)
+is still in the git history. It applies up to systemd 260.2.
 
 ## What we are tracking
 
@@ -125,19 +106,6 @@ Fedora, Void, Gentoo, or anything else, open a PR.
 | **ageverifyd** | Reference D-Bus daemon for `org.freedesktop.AgeVerification1` | [Repo](https://github.com/outerheaven199X/ageverifyd) |
 | **MidnightBSD** | DOB in installer, `aged`/`agectl` tools | [Mailing list](https://lists.freedesktop.org/archives/xdg/2026-March/014777.html) |
 
-## The systemd patch
-
-The patch removes:
-
-- `birthDate` field from the user record struct
-- `--birth-date` flag from `homectl`
-- JSON dispatch, parsing, and display code for birth dates
-- Pre-epoch date parsing path (only existed for birth dates)
-- Associated test cases and documentation
-
-Nothing else is touched. No other user record fields, no general
-date/time parsing, no other systemd functionality.
-
 ## Distro responses
 
 **Complying:** Fedora (project leader [confirmed compliance](https://lunduke.substack.com/p/slackware-says-no-to-age-verification)),
@@ -153,10 +121,8 @@ MidnightBSD (banned CA residents from desktop use)
 
 ## Help wanted
 
-This is a one person project. I need people who know package manager
-internals. I need people who package for distros other than Arch. I
-need lawyers who understand AB 1043. I need people who want to watch
-upstream and flag new threats.
+This is a one person project. I need lawyers who understand AB 1043.
+I need people who want to watch upstream and flag new threats.
 
 Open an issue. Start a discussion.
 
@@ -168,7 +134,7 @@ Open an issue. Start a discussion.
   these bills.
   [Findings repo](https://github.com/upper-up/meta-lobbying-and-other-findings).
 - [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance)
-  tracks identity collection across the Linux stack. No patches.
+  tracks identity collection across the Linux stack.
 - [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify)
   tracks which operating systems have implemented identity collection.
 - [Ageless Linux](https://agelesslinux.org/) is a Debian distro in
