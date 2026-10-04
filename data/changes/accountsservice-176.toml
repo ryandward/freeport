@@ -1,0 +1,4 @@
+project = "accountsservice"
+component = "user accounts"
+summary = "BirthDate property with polkit-gated Get/Set methods"
+url = "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176"

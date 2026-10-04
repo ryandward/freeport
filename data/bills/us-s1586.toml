@@ -1,0 +1,7 @@
+jurisdiction = "United States"
+number = "S. 1586"
+status = "pending"
+url = "https://www.congress.gov/bill/119th-congress/senate-bill/1586"
+checked = 2026-10-04
+note = "App Store Accountability Act, Senate version. Referred to Senate Commerce on 2025-05-01."
+sources = ["https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s1586.xml"]

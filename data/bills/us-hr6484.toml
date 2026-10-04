@@ -1,0 +1,7 @@
+jurisdiction = "United States"
+number = "H.R. 6484"
+status = "pending"
+url = "https://www.congress.gov/bill/119th-congress/house-bill/6484"
+checked = 2026-10-04
+note = "Kids Online Safety Act, House version. Forwarded by subcommittee to the full committee on 2025-12-11."
+sources = ["https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr6484.xml"]

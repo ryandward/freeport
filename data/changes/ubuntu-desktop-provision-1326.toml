@@ -1,0 +1,7 @@
+project = "ubuntu"
+component = "desktop provisioning"
+summary = "birthDate in desktop provisioning"
+url = "https://github.com/canonical/ubuntu-desktop-provision/pull/1326"
+cites = ["us-ca-ab1043", "us-co-sb26-051"]
+note = "The PR title names CA AB-1043 and CO SB26-051. Closed after backlash."
+sources = ["https://github.com/canonical/ubuntu-desktop-provision/pull/1326"]

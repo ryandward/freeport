@@ -1,0 +1,3 @@
+name = "ageverifyd"
+what = "Standalone daemon for org.freedesktop.AgeVerification1"
+home = "https://github.com/outerheaven199X/ageverifyd"

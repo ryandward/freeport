@@ -1,0 +1,7 @@
+jurisdiction = "United States"
+number = "S. 1748"
+status = "pending"
+url = "https://www.congress.gov/bill/119th-congress/senate-bill/1748"
+checked = 2026-10-04
+note = "Kids Online Safety Act. Ordered to be reported by the Senate Commerce Committee on 2026-08-05."
+sources = ["https://www.govinfo.gov/bulkdata/BILLSTATUS/119/s/BILLSTATUS-119s1748.xml"]

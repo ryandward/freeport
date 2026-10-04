@@ -1,0 +1,3 @@
+name = "pacman"
+what = "Package manager for Arch Linux"
+home = "https://gitlab.archlinux.org/pacman/pacman"

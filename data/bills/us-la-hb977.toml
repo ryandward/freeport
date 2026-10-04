@@ -1,0 +1,11 @@
+jurisdiction = "Louisiana"
+number = "HB 977"
+status = "enacted"
+effective = 2027-07-01
+url = "https://legis.la.gov/legis/BillInfo.aspx?s=26RS&b=HB977"
+checked = 2026-10-04
+note = "Act 185 of 2026. It replaces Act 481 of 2025 (HB 570), which it says shall not become effective."
+sources = [
+  "https://legis.la.gov/legis/ViewDocument.aspx?d=1475238",
+  "https://legis.la.gov/legis/BillInfo.aspx?s=25RS&b=HB570",
+]

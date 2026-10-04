@@ -1,0 +1,3 @@
+name = "Calamares"
+what = "Distro-agnostic installer used by Manjaro, EndeavourOS, Garuda and KDE neon"
+home = "https://codeberg.org/Calamares/calamares"

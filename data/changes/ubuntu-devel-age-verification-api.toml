@@ -1,0 +1,9 @@
+project = "ubuntu"
+component = "D-Bus interface"
+summary = "org.freedesktop.AgeVerification1 D-Bus interface proposal with SetAge, SetDateOfBirth, GetAgeBracket methods"
+url = "https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043559.html"
+state = "proposed"
+author = "Aaron Rainbolt"
+checked = 2026-10-04
+note = "Posted to ubuntu-devel on 2026-03-01 as 'On the unfortunate need for an \"age verification\" API for legal compliance reasons in some U.S. states'. The archive renumbers its pages, so search the month for that subject if the link breaks."
+sources = ["https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/thread.html"]

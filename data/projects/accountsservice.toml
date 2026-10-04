@@ -1,0 +1,3 @@
+name = "accountsservice"
+what = "D-Bus service for querying and changing user accounts"
+home = "https://gitlab.freedesktop.org/accountsservice/accountsservice"

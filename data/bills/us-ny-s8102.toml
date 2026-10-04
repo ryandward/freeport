@@ -1,0 +1,7 @@
+jurisdiction = "New York"
+number = "S8102B"
+status = "pending"
+url = "https://www.nysenate.gov/legislation/bills/2025/S8102"
+checked = 2026-10-04
+note = "Device-level age assurance. Amended and recommitted to Consumer Protection on 2026-05-15."
+sources = ["https://assembly.state.ny.us/leg/?default_fld=&leg_video=&bn=S08102&term=2025&Summary=Y&Actions=Y"]

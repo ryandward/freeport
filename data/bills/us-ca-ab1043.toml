@@ -1,0 +1,11 @@
+jurisdiction = "California"
+number = "AB 1043"
+status = "enacted"
+effective = 2027-01-01
+url = "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB1043"
+checked = 2026-10-04
+note = "Chaptered 2025-10-13 as Chapter 675, Statutes of 2025. AB 1856 amended it in 2026 (Chapter 184, Statutes of 2026)."
+sources = [
+  "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB1043",
+  "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260AB1856",
+]

@@ -1,0 +1,6 @@
+project = "xdg-specs"
+component = "XDG specification"
+summary = "Age Verification Signal Specification for freedesktop"
+url = "https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113"
+note = "Closed after community pushback. Attempt to formalize identity collection as an official XDG spec."
+sources = ["https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113"]

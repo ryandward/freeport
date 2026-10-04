@@ -1,0 +1,6 @@
+project = "pacman"
+component = "package manager"
+summary = "agerequirement field in PKGBUILDs"
+url = "https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353"
+note = "Satirical MR. Watching for real attempts."
+sources = ["https://gitlab.archlinux.org/pacman/pacman/-/merge_requests/353"]

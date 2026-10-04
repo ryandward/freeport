@@ -1,0 +1,3 @@
+name = "systemd"
+what = "System and service manager for Linux"
+home = "https://github.com/systemd/systemd"

@@ -1,0 +1,6 @@
+project = "xdg-desktop-portal"
+component = "ParentalControls portal"
+summary = "QueryAgeBracket D-Bus method exposing user age ranges to apps"
+url = "https://github.com/flatpak/xdg-desktop-portal/pull/1922"
+note = "Locked after heated debate."
+sources = ["https://github.com/flatpak/xdg-desktop-portal/pull/1922"]

@@ -1,0 +1,6 @@
+project = "systemd"
+component = "userdb"
+summary = "birthDate field in user records, --birth-date flag in homectl"
+url = "https://github.com/systemd/systemd/pull/40954"
+note = "The revert, #41179, was closed without being merged."
+sources = ["https://github.com/systemd/systemd/pull/41179"]

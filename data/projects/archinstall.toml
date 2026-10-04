@@ -1,0 +1,3 @@
+name = "archinstall"
+what = "Guided installer for Arch Linux"
+home = "https://github.com/archlinux/archinstall"

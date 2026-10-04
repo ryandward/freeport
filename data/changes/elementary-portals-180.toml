@@ -1,0 +1,6 @@
+project = "elementary-os"
+component = "desktop portals"
+summary = "Account portal exposing user info to applications"
+url = "https://github.com/elementary/portals/pull/180"
+note = "Portal-layer integration for age data."
+sources = ["https://github.com/elementary/portals/pull/180"]

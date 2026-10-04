@@ -1,0 +1,6 @@
+project = "archinstall"
+component = "installer"
+summary = "Required birth date field during user creation"
+url = "https://github.com/archlinux/archinstall/pull/4290"
+note = "Writes to userdb."
+sources = ["https://github.com/archlinux/archinstall/pull/4290"]

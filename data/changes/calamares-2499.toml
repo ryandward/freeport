@@ -1,0 +1,6 @@
+project = "calamares"
+component = "installer"
+summary = "Birth date field in user creation, writes to AccountsService and systemd userdb"
+url = "https://codeberg.org/Calamares/calamares/pulls/2499"
+note = "US law pushed into EU infrastructure. Thread locked after heated pushback."
+sources = ["https://codeberg.org/Calamares/calamares/pulls/2499"]

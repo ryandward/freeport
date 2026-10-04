@@ -1,0 +1,6 @@
+project = "midnightbsd"
+component = "base system"
+summary = "aged daemon that stores age verification data and answers queries for it"
+url = "https://github.com/MidnightBSD/src/pull/302"
+note = "The plan behind it was posted to the xdg list on 2026-03-02."
+sources = ["https://lists.freedesktop.org/archives/xdg/2026-March/014777.html"]

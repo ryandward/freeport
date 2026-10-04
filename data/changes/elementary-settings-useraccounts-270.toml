@@ -1,0 +1,4 @@
+project = "elementary-os"
+component = "user settings"
+summary = "Age declaration UI in account creation"
+url = "https://github.com/elementary/settings-useraccounts/pull/270"

@@ -1,0 +1,9 @@
+project = "ageverifyd"
+component = "D-Bus daemon"
+summary = "Reference implementation of org.freedesktop.AgeVerification1"
+url = "https://github.com/outerheaven199X/ageverifyd"
+state = "withdrawn"
+author = "outerheaven199X"
+checked = 2026-10-04
+note = "Standalone daemon with SetAge, SetDateOfBirth and GetAgeBracket methods. The repository returned 404 on 2026-10-04."
+sources = ["https://github.com/outerheaven199X/ageverifyd"]

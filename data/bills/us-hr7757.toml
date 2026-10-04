@@ -1,0 +1,7 @@
+jurisdiction = "United States"
+number = "H.R. 7757"
+status = "passed-one-chamber"
+url = "https://www.congress.gov/bill/119th-congress/house-bill/7757"
+checked = 2026-10-04
+note = "KIDS Act, which carries a Kids Online Safety Act subtitle. Passed the House 267-117 on 2026-06-29 and was referred to Senate Commerce."
+sources = ["https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr7757.xml"]
