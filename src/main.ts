@@ -1,10 +1,11 @@
-import { appendFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { checkWithRetries } from './forge.ts';
 import type { Check } from './forge.ts';
 import { page } from './page.ts';
 import { load } from './records.ts';
 import type { ForgeChange, Records } from './records.ts';
-import { overdue, parseEvents, parseState, refresh, serializeEvents, serializeState, summary } from './refresh.ts';
+import { entryOf, overdue, readLedger, refresh, serializeEvents, serializeState, summary } from './refresh.ts';
+import type { Ledger } from './refresh.ts';
 
 const DATA = 'data';
 const STATE = 'data/state.json';
@@ -12,24 +13,40 @@ const EVENTS = 'data/events.jsonl';
 const OUT = '_site';
 
 const now = (): string => new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-const read = (path: string): string => (existsSync(path) ? readFileSync(path, 'utf8') : '');
+const read = (path: string): string | null => (existsSync(path) ? readFileSync(path, 'utf8') : null);
 
-function records(): Records {
+type Opened = { records: Records; checked: ForgeChange[]; ledger: Ledger };
+
+// Every command starts here, so the records and the bot's two files are always read
+// together, and a problem in any of them stops the command before it writes anything.
+function open(): Opened {
   const loaded = load(DATA);
-  if (loaded.ok) return loaded.records;
-  for (const error of loaded.errors) console.error(error);
-  console.error(`${loaded.errors.length} problem(s) in ${DATA}/`);
+  const problems = loaded.ok ? [] : loaded.errors;
+  if (loaded.ok) {
+    const checked = loaded.records.changes.filter((change): change is ForgeChange => change.kept === 'forge');
+    try {
+      const ledger = readLedger(
+        read(STATE),
+        read(EVENTS),
+        checked.map((change) => change.id),
+      );
+      return { records: loaded.records, checked, ledger };
+    } catch (error) {
+      problems.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+  for (const problem of problems) console.error(problem);
+  console.error(`${problems.length} problem(s) in ${DATA}/`);
   process.exit(1);
 }
 
 function validate(): void {
-  const { projects, changes, bills } = records();
+  const { projects, changes, bills } = open().records;
   console.log(`${projects.length} projects, ${changes.length} changes, ${bills.length} bills`);
 }
 
 async function refreshState(): Promise<void> {
-  const checked = records().changes.filter((change): change is ForgeChange => change.kept === 'forge');
-  const previous = parseState(read(STATE));
+  const { checked, ledger } = open();
   const token = process.env['GITHUB_TOKEN'] || null;
   const wait = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -42,7 +59,7 @@ async function refreshState(): Promise<void> {
 
   const result = refresh(
     checked.map((change) => change.id),
-    previous,
+    ledger.state,
     checks,
     now(),
   );
@@ -51,21 +68,19 @@ async function refreshState(): Promise<void> {
     process.exit(1);
   }
 
-  const before = serializeState(previous);
+  const before = serializeState(ledger.state);
   const after = serializeState(result.state);
   writeFileSync(STATE, after);
-  if (result.events.length > 0) appendFileSync(EVENTS, serializeEvents(result.events));
+  // The whole feed is written back, not appended to, so a last line without a newline
+  // cannot end up glued to the next event.
+  if (result.events.length > 0) writeFileSync(EVENTS, serializeEvents([...ledger.events, ...result.events]));
   // the workflow uses this last line as the commit subject
   console.log(summary(result.events, before !== after));
 }
 
 function build(): void {
-  const markup = page({
-    records: records(),
-    state: parseState(read(STATE)),
-    events: parseEvents(read(EVENTS)),
-    now: now(),
-  });
+  const { records, ledger } = open();
+  const markup = page({ records, state: ledger.state, events: ledger.events, now: now() });
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
   writeFileSync(`${OUT}/index.html`, markup);
@@ -74,11 +89,12 @@ function build(): void {
 }
 
 function reportOverdue(): void {
-  const late = overdue(parseState(read(STATE)), now());
-  if (late.length > 0) {
-    console.error(`unconfirmed for a day or more: ${late.join(', ')}`);
-    process.exit(1);
-  }
+  const { checked, ledger } = open();
+  const never = checked.map((change) => change.id).filter((id) => entryOf(ledger.state, id) === undefined);
+  const late = overdue(ledger.state, now());
+  if (never.length > 0) console.error(`never confirmed: ${never.join(', ')}`);
+  if (late.length > 0) console.error(`unconfirmed for a day or more: ${late.join(', ')}`);
+  if (never.length > 0 || late.length > 0) process.exit(1);
   console.log('every change was confirmed within the last day');
 }
 

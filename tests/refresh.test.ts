@@ -4,6 +4,7 @@ import {
   overdue,
   parseEvents,
   parseState,
+  readLedger,
   refresh,
   serializeEvents,
   serializeState,
@@ -120,6 +121,68 @@ test('a damaged event line stops the run and names the line', () => {
   const good = '{"at":"2026-03-18T23:04:03Z","change":"x-1","from":null,"to":"open"}';
   assert.throws(() => parseEvents(`${good}\n=======\n`), /events\.jsonl line 2 is not json/);
   assert.throws(() => parseEvents(`${good}\n{"at":1}\n`), /events\.jsonl line 2 is malformed/);
+});
+
+test('a change whose id is also a built-in property name is still seen for the first time', () => {
+  const result = refresh(['constructor'], {}, new Map([['constructor', nowMerged]]), NOW);
+  assert.deepEqual(result.events, [{ at: '2026-03-18T23:04:03Z', change: 'constructor', from: null, to: 'merged' }]);
+  assert.deepEqual(result.unpublishable, []);
+});
+
+test('a time that is not utc with whole seconds is damage', () => {
+  const entry = { state: 'open', since: 'yesterday', author: 'alice', unconfirmed_since: null };
+  assert.throws(() => parseState(JSON.stringify({ 'x-1': entry })), /state\.json: x-1 is malformed/);
+  assert.throws(
+    () => parseEvents('{"at":"2026-03-18","change":"x-1","from":null,"to":"open"}'),
+    /events\.jsonl line 1 is malformed/,
+  );
+});
+
+const openState = JSON.stringify({ [ID]: open });
+const openEvent = `{"at":"2026-03-10T08:00:00Z","change":"${ID}","from":null,"to":"open"}\n`;
+const mergeEvent = `{"at":"2026-03-18T23:04:03Z","change":"${ID}","from":"open","to":"merged"}\n`;
+
+test('a first run has no state and no events', () => {
+  assert.deepEqual(readLedger(null, null, ids), { state: {}, events: [] });
+  assert.deepEqual(readLedger('{}\n', null, ids), { state: {}, events: [] });
+});
+
+test('state and events that agree are read together', () => {
+  assert.deepEqual(readLedger(openState, openEvent, ids), {
+    state: { [ID]: open },
+    events: [{ at: '2026-03-10T08:00:00Z', change: ID, from: null, to: 'open' }],
+  });
+});
+
+test('a state file that is gone or blank is damage once the feed has events', () => {
+  const damage = /state\.json is missing or empty while events\.jsonl has events/;
+  assert.throws(() => readLedger(null, openEvent, ids), damage);
+  assert.throws(() => readLedger('  \n', openEvent, ids), damage);
+});
+
+test('an entry the feed never announced is damage', () => {
+  assert.throws(
+    () => readLedger(openState, '', ids),
+    /state\.json has systemd-40954 but events\.jsonl has no event for it/,
+  );
+});
+
+test('an entry that disagrees with its last event is damage', () => {
+  assert.throws(
+    () => readLedger(openState, openEvent + mergeEvent, ids),
+    /state\.json says systemd-40954 is open but its last event in events\.jsonl says merged/,
+  );
+});
+
+test('a tracked change the feed announced but the state forgot is damage', () => {
+  assert.throws(
+    () => readLedger('{}', openEvent, ids),
+    /events\.jsonl has events for systemd-40954 but state\.json has no entry for it/,
+  );
+});
+
+test('events of a change that is no longer tracked are left alone', () => {
+  assert.deepEqual(readLedger('{}', openEvent, []).state, {});
 });
 
 test('the commit subject says what moved', () => {

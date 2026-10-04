@@ -2,6 +2,7 @@ import { html } from './html.ts';
 import type { Html } from './html.ts';
 import { label } from './target.ts';
 import type { Bill, Change, Records } from './records.ts';
+import { entryOf } from './refresh.ts';
 import type { FeedEvent, State } from './refresh.ts';
 
 export type PageInput = { records: Records; state: State; events: readonly FeedEvent[]; now: string };
@@ -34,7 +35,7 @@ function shown(change: Change, project: string, state: State): Shown {
       unconfirmedSince: null,
     };
   }
-  const entry = state[change.id];
+  const entry = entryOf(state, change.id);
   if (entry === undefined) throw new Error(`no state for ${change.id}, run refresh before build`);
   return {
     change,

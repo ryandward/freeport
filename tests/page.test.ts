@@ -185,6 +185,13 @@ test('the page carries its build time, which the stale warning reads', () => {
   assert.ok(out.includes('id="stale" hidden'));
 });
 
+test('a checked change named like a built-in property still needs its own state', () => {
+  const [first] = records.changes;
+  assert.ok(first !== undefined);
+  const named = { ...records, changes: [{ ...first, id: 'constructor' }] };
+  assert.throws(() => page({ ...input, records: named, state: {} }), /no state for constructor, run refresh before build/);
+});
+
 test('a checked change with no state stops the build', () => {
   assert.throws(() => page({ ...input, state: {} }), /no state for systemd-40954, run refresh before build/);
 });
