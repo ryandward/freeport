@@ -23,16 +23,8 @@ a real time API. In response, `birthDate` fields, D-Bus interfaces,
 and installer prompts are being added to core open source packages
 like systemd, accountsservice, and xdg-desktop-portal.
 
-| State | Bill | Status |
-|-------|------|--------|
-| California | AB 1043 | Enacted, effective Jan 1, 2027 |
-| Colorado | SB 26-051 | Passed Senate, in House committee |
-| Louisiana | HB 570 | Enacted, effective July 1, 2026 |
-| Utah | SB 142 | Enacted |
-| New York | S8102A | Pending |
-| Illinois | HB 3304, HB 4140, SB 2037 | Pending |
-| Federal | KOSA, ASAA | Pending |
-| Brazil | Lei 15.211 | Enacted |
+The bills, and where each one stands, are on the
+[tracker](https://ryandward.github.io/freeport/#laws).
 
 These bills share a common template (the ICMEC "Digital Age Assurance
 Act") and none contain exemptions for open source, non-commercial
@@ -53,9 +45,9 @@ infrastructure.
 freeport tracks the politics, the projects, the money, and the people
 behind identity collection code in Linux.
 
-Every 4 hours we scan upstream for new identity collection code across
-GitHub, GitLab, and Codeberg. Findings go to
-[issue #1](https://github.com/ryandward/freeport/issues/1).
+Every 4 hours we check every change we track against GitHub, GitLab,
+and Codeberg, and record what moved. The result is the
+[tracker](https://ryandward.github.io/freeport/).
 
 ## The pacman repo is gone
 
@@ -85,26 +77,10 @@ is still in the git history. It applies up to systemd 260.2.
 
 ## What we are tracking
 
-### Core packages
-
-| Project | What was added | Status |
-|---------|---------------|--------|
-| **systemd** | `birthDate` in userdb records, `--birth-date` in homectl | [Merged](https://github.com/systemd/systemd/pull/40954). [Revert](https://github.com/systemd/systemd/pull/41179) was closed. |
-| **xdg-desktop-portal** | `QueryAgeBracket` D-Bus method | [Draft](https://github.com/flatpak/xdg-desktop-portal/pull/1922) |
-| **xdg-specs** | Age verification signal specification | [Closed](https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113) after community pushback |
-| **accountsservice** | `BirthDate` property with polkit-gated get/set | [Open](https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176) |
-| **Ubuntu D-Bus proposal** | `org.freedesktop.AgeVerification1` with SetAge, SetDateOfBirth, GetAgeBracket | [Proposed](https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043510.html) on ubuntu-devel. Technical blueprint for distro compliance. |
-
-### Installers and desktops
-
-| Project | What was added | Status |
-|---------|---------------|--------|
-| **Calamares** | Birth date field, writes to AccountsService and userdb | [Draft](https://codeberg.org/Calamares/calamares/pulls/2499). European project getting US compliance PRs. Locked. |
-| **archinstall** | Required birth date during user creation | [Open](https://github.com/archlinux/archinstall/pull/4290) |
-| **elementary OS** | Birth date UI and account portal | [Settings](https://github.com/elementary/settings-useraccounts/pull/270), [Portals](https://github.com/elementary/portals/pull/180) |
-| **Ubuntu** | birthDate in desktop provisioning | [Closed](https://github.com/canonical/ubuntu-desktop-provision/pull/1326) after backlash |
-| **ageverifyd** | Reference D-Bus daemon for `org.freedesktop.AgeVerification1` | [Repo](https://github.com/outerheaven199X/ageverifyd) |
-| **MidnightBSD** | DOB in installer, `aged`/`agectl` tools | [Mailing list](https://lists.freedesktop.org/archives/xdg/2026-March/014777.html) |
+Everything we track is a small file under [`data/`](data/): one per
+project, one per change proposed to a project, and one per bill. The
+[tracker](https://ryandward.github.io/freeport/) is built from those
+files. To add something, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Distro responses
 
