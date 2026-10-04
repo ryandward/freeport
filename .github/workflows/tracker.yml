@@ -54,7 +54,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # The newest main, not the commit that started this run. A run that waited behind
+      # another one would otherwise start from state the earlier run already moved past.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-node@v4
         with:
