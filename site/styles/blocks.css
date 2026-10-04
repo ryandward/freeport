@@ -184,7 +184,7 @@
 }
 
 
-/* ── Info Card (leaderboard — same pattern as threat-card, less dense) ── */
+/* ── Info Card (feed and bills — same pattern as threat-card, less dense) ── */
 
 .info-card {
   background-color: var(--color-surface-raised);

@@ -36,7 +36,6 @@
  * ═══════════════════════════════════════════ */
 
 /* ── Success / green ── */
-[data-status="active"],
 [data-status="success"],
 [data-status="confirmed"],
 [data-status="complete"],
@@ -61,6 +60,10 @@
 [data-status="processing"],
 [data-status="open"],
 [data-status="draft"],
+[data-status="active"],
+[data-status="proposed"],
+[data-status="passed-one-chamber"],
+[data-status="passed-legislature"],
 [data-status="in progress"] {
   --status-color: var(--color-warning);
 }
@@ -71,6 +74,10 @@
 [data-status="satirical"],
 [data-status="watching"],
 [data-status="none"],
+[data-status="closed"],
+[data-status="withdrawn"],
+[data-status="vetoed"],
+[data-status="dead"],
 [data-status="n/a"] {
   --status-color: var(--color-text-muted);
 }
